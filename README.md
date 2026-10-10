@@ -32,7 +32,7 @@ curl -fsSL https://bun.sh/install | bash
 git clone https://github.com/khanhnq1611/mrtoro.git && cd mrtoro
 bun install
 cd packages/opencode
-OPENCODE_CHANNEL=latest OPENCODE_VERSION=1.18.35 bun run script/build.ts --single --skip-install
+bun run script/build.ts --single --skip-install
 ```
 
 Binary output: `packages/opencode/dist/mrtoro-linux-x64/bin/mrtoro`
