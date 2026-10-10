@@ -35,6 +35,8 @@ cd packages/opencode
 bun run script/build.ts --single --skip-install
 ```
 
+> `channel=latest` và `version=1.18.35` đã được hardcode làm default. Override bằng env var nếu cần: `OPENCODE_CHANNEL=... OPENCODE_VERSION=... bun run script/build.ts ...`
+
 Binary output: `packages/opencode/dist/mrtoro-linux-x64/bin/mrtoro`
 
 Add to PATH:
