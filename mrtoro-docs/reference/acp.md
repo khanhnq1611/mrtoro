@@ -1,0 +1,154 @@
+# ACP Support
+
+Use mrtoro in any ACP-compatible editor.
+
+mrtoro supports the [Agent Client Protocol](https://agentclientprotocol.com) or (ACP), allowing you to use it directly in compatible editors and IDEs.
+
+> **Tip:**
+> For a list of editors and tools that support ACP, check out the [ACP progress report](https://zed.dev/blog/acp-progress-report#available-now).
+
+ACP is an open protocol that standardizes communication between code editors and AI coding agents.
+
+---
+
+## Configure
+
+To use mrtoro via ACP, configure your editor to run the `mrtoro acp` command.
+
+The command starts mrtoro as an ACP-compatible subprocess that communicates with your editor over JSON-RPC via stdio.
+
+Below are examples for popular editors that support ACP.
+
+---
+
+### Zed
+
+Add mrtoro as a custom agent server to your [Zed](https://zed.dev) configuration (`~/.config/zed/settings.json`):
+
+```json title="~/.config/zed/settings.json"
+{
+  "agent_servers": {
+    "mrtoro": {
+      "type": "custom",
+      "command": "mrtoro",
+      "args": ["acp"]
+    }
+  }
+}
+```
+
+To open it, use the `agent: new thread` action in the **Command Palette**.
+
+You can also bind a keyboard shortcut by editing your `keymap.json`:
+
+```json title="keymap.json"
+[
+  {
+    "bindings": {
+      "cmd-alt-o": [
+        "agent::NewExternalAgentThread",
+        {
+          "agent": {
+            "custom": {
+              "name": "mrtoro",
+              "command": {
+                "command": "mrtoro",
+                "args": ["acp"]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]
+```
+
+---
+
+### JetBrains IDEs
+
+Add to your [JetBrains IDE](https://www.jetbrains.com/) acp.json according to the [documentation](https://www.jetbrains.com/help/ai-assistant/acp.html):
+
+```json title="acp.json"
+{
+  "agent_servers": {
+    "mrtoro": {
+      "command": "/absolute/path/bin/mrtoro",
+      "args": ["acp"]
+    }
+  }
+}
+```
+
+To open it, use the new 'mrtoro' agent in the AI Chat agent selector.
+
+---
+
+### Avante.nvim
+
+Add to your [Avante.nvim](https://github.com/yetone/avante.nvim) configuration:
+
+```lua
+{
+  acp_providers = {
+    ["mrtoro"] = {
+      command = "mrtoro",
+      args = { "acp" }
+    }
+  }
+}
+```
+
+If you need to pass environment variables:
+
+```lua {6-8}
+{
+  acp_providers = {
+    ["mrtoro"] = {
+      command = "mrtoro",
+      args = { "acp" },
+      env = {
+        ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+      }
+    }
+  }
+}
+```
+
+---
+
+### CodeCompanion.nvim
+
+To use mrtoro as an ACP agent in [CodeCompanion.nvim](https://github.com/olimorris/codecompanion.nvim), add the following to your Neovim config:
+
+```lua
+require("codecompanion").setup({
+  interactions = {
+    chat = {
+      adapter = {
+        name = "mrtoro",
+        model = "claude-sonnet-4",
+      },
+    },
+  },
+})
+```
+
+This config sets up CodeCompanion to use mrtoro as the ACP agent for chat.
+
+If you need to pass environment variables (like a provider API key such as `ANTHROPIC_API_KEY`), refer to [Configuring Adapters: Environment Variables](https://codecompanion.olimorris.dev/getting-started#setting-an-api-key) in the CodeCompanion.nvim documentation for full details.
+
+## Support
+
+mrtoro works the same via ACP as it does in the terminal. All features are supported:
+
+> **Note:**
+> Some built-in slash commands like `/undo` and `/redo` are currently unsupported.
+
+- Built-in tools (file operations, terminal commands, etc.)
+- Custom tools and slash commands
+- MCP servers configured in your mrtoro config
+- Project-specific rules from `AGENTS.md`
+- Custom formatters and linters
+- Agents and permissions system
