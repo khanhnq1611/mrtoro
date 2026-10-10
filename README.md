@@ -23,7 +23,7 @@ Runs entirely on your machine. Connects to any LLM provider via API key or a loc
 Build from source using [Bun](https://bun.sh):
 
 ```bash
-git clone <this-repo> && cd torocode
+git clone https://github.com/khanhnq1611/mrtoro.git && cd mrtoro
 cd packages/opencode
 OPENCODE_CHANNEL=latest OPENCODE_VERSION=1.18.35 bun run script/build.ts --single --skip-install
 ```
