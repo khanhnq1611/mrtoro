@@ -1,10 +1,21 @@
-import { Effect, Schema } from "effect"
+import { Effect, Schema, SchemaGetter } from "effect"
 import * as Tool from "./tool"
 import DESCRIPTION_WRITE from "./todowrite.txt"
 import { Todo } from "../session/todo"
 
+const TodoArray = Schema.mutable(Schema.Array(Todo.Info))
+
+// Some LLMs serialize the array as a JSON string instead of a real array.
+// Accept unknown input and coerce: if it's a string, JSON-parse it first.
+const TodosParam = Schema.Unknown.pipe(
+  Schema.decodeTo(TodoArray, {
+    decode: SchemaGetter.transform((input) => (typeof input === "string" ? JSON.parse(input) : input)),
+    encode: SchemaGetter.passthrough({ strict: false }),
+  }),
+).annotate({ description: "The updated todo list" })
+
 export const Parameters = Schema.Struct({
-  todos: Schema.mutable(Schema.Array(Todo.Info)).annotate({ description: "The updated todo list" }),
+  todos: TodosParam,
 })
 
 type Metadata = {
