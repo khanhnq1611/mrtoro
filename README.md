@@ -20,10 +20,17 @@ Runs entirely on your machine. Connects to any LLM provider via API key or a loc
 
 ## Installation
 
-Build from source using [Bun](https://bun.sh):
+**1. Install Bun** (if not already installed):
+
+```bash
+curl -fsSL https://bun.sh/install | bash
+```
+
+**2. Clone and build:**
 
 ```bash
 git clone https://github.com/khanhnq1611/mrtoro.git && cd mrtoro
+bun install
 cd packages/opencode
 OPENCODE_CHANNEL=latest OPENCODE_VERSION=1.18.35 bun run script/build.ts --single --skip-install
 ```
