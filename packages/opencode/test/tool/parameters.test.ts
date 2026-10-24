@@ -20,7 +20,7 @@ import { Parameters as Read } from "../../src/tool/read"
 import { Parameters as Shell } from "../../src/tool/shell"
 import { Parameters as Skill } from "../../src/tool/skill"
 import { Parameters as Task } from "../../src/tool/task"
-import { Parameters as Todo } from "../../src/tool/todo"
+import { Parameters as Todo, WireParameters as TodoWire } from "../../src/tool/todo"
 import { Parameters as WebFetch } from "../../src/tool/webfetch"
 import { Parameters as WebSearch } from "../../src/tool/websearch"
 import { Parameters as Write } from "../../src/tool/write"
@@ -46,7 +46,9 @@ describe("tool parameters", () => {
     test("read", () => expect(toJsonSchema(Read)).toMatchSnapshot())
     test("skill", () => expect(toJsonSchema(Skill)).toMatchSnapshot())
     test("task", () => expect(toJsonSchema(Task)).toMatchSnapshot())
-    test("todo", () => expect(toJsonSchema(Todo)).toMatchSnapshot())
+    // todowrite decodes from unknown to tolerate the JSON-string form, so what the LLM sees is
+    // its `jsonSchema` override rather than a schema generated off `Parameters`.
+    test("todo", () => expect(toJsonSchema(TodoWire)).toMatchSnapshot())
     test("webfetch", () => expect(toJsonSchema(WebFetch)).toMatchSnapshot())
     test("websearch", () => expect(toJsonSchema(WebSearch)).toMatchSnapshot())
     test("write", () => expect(toJsonSchema(Write)).toMatchSnapshot())

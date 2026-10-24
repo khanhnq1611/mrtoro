@@ -1,5 +1,6 @@
 import { Effect, Schema, SchemaGetter } from "effect"
 import * as Tool from "./tool"
+import { ToolJsonSchema } from "./json-schema"
 import DESCRIPTION_WRITE from "./todowrite.txt"
 import { Todo } from "../session/todo"
 
@@ -18,6 +19,13 @@ export const Parameters = Schema.Struct({
   todos: TodosParam,
 })
 
+// `TodosParam` accepts unknown input so the JSON-string form decodes, which also erases the
+// shape from the JSON Schema generated off it. The model is shown this strict version instead,
+// so it keeps seeing what a todo looks like and writes a real array.
+export const WireParameters = Schema.Struct({
+  todos: TodoArray.annotate({ description: "The updated todo list" }),
+})
+
 type Metadata = {
   todos: Todo.Info[]
 }
@@ -30,6 +38,7 @@ export const TodoWriteTool = Tool.define<typeof Parameters, Metadata, Todo.Servi
     return {
       description: DESCRIPTION_WRITE,
       parameters: Parameters,
+      jsonSchema: ToolJsonSchema.fromSchema(WireParameters),
       execute: (params: Schema.Schema.Type<typeof Parameters>, ctx: Tool.Context<Metadata>) =>
         Effect.gen(function* () {
           yield* ctx.ask({
