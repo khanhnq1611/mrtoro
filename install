@@ -99,13 +99,19 @@ fi
 info "commit $(git -C "$SRC" log -1 --format='%h %s')"
 
 # --- build --------------------------------------------------------------------
+LOG=$(mktemp -t mrtoro-install.XXXXXX)
+quiet() { "$@" >"$LOG" 2>&1 || { tail -n 30 "$LOG" >&2; return 1; }; }
+
 step "Installing dependencies (first run takes a few minutes)"
-(cd "$SRC" && bun install --frozen-lockfile >/dev/null) || (cd "$SRC" && bun install >/dev/null)
+# A package install script occasionally fails on a fresh download; one retry clears it.
+(cd "$SRC" && bun install --frozen-lockfile >"$LOG" 2>&1) ||
+  (cd "$SRC" && quiet bun install --frozen-lockfile) || die "bun install failed (full log: $LOG)"
 
 step "Building the binary"
-(cd "$SRC/packages/opencode" && bun run script/build.ts "${BUILD_FLAGS[@]}" >/dev/null)
+(cd "$SRC/packages/opencode" && quiet bun run script/build.ts "${BUILD_FLAGS[@]}") || die "build failed (full log: $LOG)"
 BUILT=$SRC/packages/opencode/dist/$TARGET/bin/mrtoro
 [[ -x $BUILT ]] || die "build finished but $BUILT is missing"
+rm -f "$LOG"
 
 # --- install ------------------------------------------------------------------
 # Prefer a user-writable directory that is already on PATH, so nothing needs editing.
