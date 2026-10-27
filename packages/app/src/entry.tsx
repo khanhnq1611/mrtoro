@@ -1,7 +1,9 @@
 // @refresh reload
 
 import * as Sentry from "@sentry/solid"
+import { onMount } from "solid-js"
 import { render } from "solid-js/web"
+import { HashRouter } from "@solidjs/router"
 import { AppBaseProviders, AppInterface } from "@/app"
 import { loadInitialLocale } from "@/context/language"
 import { type Platform, PlatformProvider } from "@/context/platform"
@@ -11,8 +13,53 @@ import { dict as zh } from "@/i18n/zh"
 import { authFromToken } from "@/utils/server"
 import pkg from "../package.json"
 import { ServerConnection } from "./context/server"
+import { useLayout } from "./context/layout"
 
 const DEFAULT_SERVER_URL_KEY = "opencode.settings.dat:defaultServerUrl"
+
+// mrtoro: the relay serves this app at /env/<envID>/ and proxies that
+// environment's API at /api/env/<envID>. Every environment shares the relay's
+// origin, so a remembered default server must not leak from one to another.
+// In-app routes live in the hash (/env/<envID>/#/session/…): with a router
+// `base`, location.pathname would include the prefix and break the app's
+// comparisons against "/" and "/new-session".
+const relayEnvironment = location.pathname.match(/^\/env\/(env_[A-Za-z0-9]{16,64})(?:\/|$)/)?.[1]
+
+// mrtoro: parts of the SDK join paths like `new URL("/api/session", base)`,
+// which drops the /api/env/<envID> prefix. The app never calls the relay's own
+// endpoints, so route every same-origin request outside /app back under it.
+if (relayEnvironment) {
+  const prefix = `/api/env/${relayEnvironment}`
+  const original = globalThis.fetch.bind(globalThis)
+  const scoped = (input: RequestInfo | URL, init?: RequestInit) => {
+    const request = input instanceof Request ? input : undefined
+    const url = new URL(request ? request.url : input.toString(), location.href)
+    const routed =
+      url.origin !== location.origin ||
+      url.pathname === prefix ||
+      url.pathname.startsWith(prefix + "/") ||
+      url.pathname.startsWith("/app/")
+    if (routed) return original(input, init)
+    url.pathname = prefix + url.pathname
+    return original(request ? new Request(url, request) : url, init)
+  }
+  globalThis.fetch = Object.assign(scoped, { preconnect: () => {} }) as typeof fetch
+}
+
+// An environment is one directory on one machine: show it as the project
+// instead of asking the user to add it by hand.
+function RelayProject() {
+  const layout = useLayout()
+  onMount(() => {
+    void fetch("/path")
+      .then((response) => response.json())
+      .then((info: { directory?: string }) => {
+        if (info.directory) layout.projects.open(info.directory)
+      })
+      .catch(() => {})
+  })
+  return null
+}
 
 const getLocale = () => {
   if (typeof navigator !== "object") return "en" as const
@@ -97,6 +144,7 @@ if (!(root instanceof HTMLElement) && import.meta.env.DEV) {
 }
 
 const getCurrentUrl = () => {
+  if (relayEnvironment) return `${location.origin}/api/env/${relayEnvironment}`
   if (location.hostname.includes("opencode.ai")) return "http://localhost:4096"
   if (import.meta.env.DEV)
     return `http://${import.meta.env.VITE_OPENCODE_SERVER_HOST ?? "localhost"}:${import.meta.env.VITE_OPENCODE_SERVER_PORT ?? "4096"}`
@@ -104,6 +152,7 @@ const getCurrentUrl = () => {
 }
 
 const getDefaultUrl = () => {
+  if (relayEnvironment) return getCurrentUrl()
   const lsDefault = readDefaultServerUrl()
   if (lsDefault) return lsDefault
   return getCurrentUrl()
@@ -124,10 +173,14 @@ const platform: Platform = {
   restart,
   notify,
   getDefaultServer: async () => {
+    if (relayEnvironment) return ServerConnection.Key.make(getCurrentUrl())
     const stored = readDefaultServerUrl()
     return stored ? ServerConnection.Key.make(stored) : null
   },
-  setDefaultServer: writeDefaultServerUrl,
+  setDefaultServer: (url) => {
+    if (relayEnvironment) return
+    writeDefaultServerUrl(url)
+  },
 }
 
 if (import.meta.env.VITE_SENTRY_DSN) {
@@ -169,6 +222,8 @@ if (root instanceof HTMLElement) {
               defaultServer={ServerConnection.Key.make(getDefaultUrl())}
               canonicalLocalServer={ServerConnection.key(server)}
               servers={[server]}
+              router={relayEnvironment ? HashRouter : undefined}
+              serverScoped={relayEnvironment ? <RelayProject /> : undefined}
               disableHealthCheck
             />
           </AppBaseProviders>

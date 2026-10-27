@@ -18,6 +18,7 @@
     "start": "vite",
     "dev": "vite",
     "build": "vite build",
+    "build:relay": "OPENCODE_CHANNEL=latest vite build --base /app/ --sourcemap false --outDir dist-relay",
     "serve": "vite preview",
     "test": "bun run test:unit && bun run test:browser",
     "test:unit": "bun test --conditions=solid --only-failures --preload ./happydom.ts ./src",
