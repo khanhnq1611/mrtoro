@@ -102,7 +102,11 @@ if ! command -v bun >/dev/null || [[ $(bun --version) != "$BUN_VERSION" ]]; then
   BUN_DIR=${XDG_DATA_HOME:-$HOME/.local/share}/mrtoro-bun
   if [[ ! -x $BUN_DIR/bin/bun || $("$BUN_DIR/bin/bun" --version) != "$BUN_VERSION" ]]; then
     step "Downloading Bun $BUN_VERSION"
-    zip=bun-linux-$([[ $ARCH == arm64 ]] && echo aarch64 || echo x64)$([[ $TARGET == *baseline ]] && echo -baseline).zip
+    case $TARGET in
+      *arm64) zip=bun-linux-aarch64.zip ;;
+      *baseline) zip=bun-linux-x64-baseline.zip ;;
+      *) zip=bun-linux-x64.zip ;;
+    esac
     tmp=$(mktemp -d)
     curl -fsSL -o "$tmp/bun.zip" "https://github.com/oven-sh/bun/releases/download/bun-v$BUN_VERSION/$zip" ||
       die "could not download Bun $BUN_VERSION ($zip)"
