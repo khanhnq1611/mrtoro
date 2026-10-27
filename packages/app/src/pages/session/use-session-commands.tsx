@@ -1,4 +1,5 @@
 import { useNavigate } from "@solidjs/router"
+import { terminalAvailable } from "@/utils/relay"
 import { useCommand, type CommandOption } from "@/context/command"
 import { useDialog } from "@opencode-ai/ui/context/dialog"
 import { previewSelectedLines } from "@opencode-ai/session-ui/pierre/selection-bridge"
@@ -544,21 +545,7 @@ export const useSessionCommands = (actions: SessionCommandContext) => {
   ]
 
   const viewCmds = () => [
-    viewCommand({
-      id: "terminal.toggle",
-      title: language.t("command.terminal.toggle"),
-      keybind: "ctrl+`",
-      slash: "terminal",
-      onSelect: () => {
-        if (view().terminal.opened()) {
-          terminal.cancelFocus()
-          view().terminal.close()
-          return
-        }
-        terminal.requestFocus(terminal.active())
-        view().terminal.open()
-      },
-    }),
+    ...(terminalAvailable ? [terminalToggle()] : []),
     viewCommand({
       id: "review.toggle",
       title: language.t("command.review.toggle"),
@@ -583,7 +570,24 @@ export const useSessionCommands = (actions: SessionCommandContext) => {
     }),
   ]
 
-  const terminalCmds = () => [
+  const terminalToggle = () =>
+    viewCommand({
+      id: "terminal.toggle",
+      title: language.t("command.terminal.toggle"),
+      keybind: "ctrl+`",
+      slash: "terminal",
+      onSelect: () => {
+        if (view().terminal.opened()) {
+          terminal.cancelFocus()
+          view().terminal.close()
+          return
+        }
+        terminal.requestFocus(terminal.active())
+        view().terminal.open()
+      },
+    })
+
+  const terminalCmds = () => !terminalAvailable ? [] : [
     terminalCommand({
       id: "terminal.close",
       title: language.t("terminal.close"),

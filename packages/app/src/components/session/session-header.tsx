@@ -1,4 +1,5 @@
 import { AppIcon } from "@opencode-ai/ui/app-icon"
+import { terminalAvailable } from "@/utils/relay"
 import { Button } from "@opencode-ai/ui/button"
 import { DropdownMenu } from "@opencode-ai/ui/dropdown-menu"
 import { Icon } from "@opencode-ai/ui/icon"
@@ -445,21 +446,23 @@ export function SessionHeader() {
                         <StatusPopover />
                       </Tooltip>
                     </Show>
-                    <TooltipKeybind
-                      title={language.t("command.terminal.toggle")}
-                      keybind={command.keybind("terminal.toggle")}
-                    >
-                      <Button
-                        variant="ghost"
-                        class="group/terminal-toggle titlebar-icon w-8 h-6 p-0 box-border shrink-0"
-                        onClick={toggleTerminal}
-                        aria-label={language.t("command.terminal.toggle")}
-                        aria-expanded={view().terminal.opened()}
-                        aria-controls="terminal-panel"
+                    <Show when={terminalAvailable}>
+                      <TooltipKeybind
+                        title={language.t("command.terminal.toggle")}
+                        keybind={command.keybind("terminal.toggle")}
                       >
-                        <Icon size="small" name={view().terminal.opened() ? "terminal-active" : "terminal"} />
-                      </Button>
-                    </TooltipKeybind>
+                        <Button
+                          variant="ghost"
+                          class="group/terminal-toggle titlebar-icon w-8 h-6 p-0 box-border shrink-0"
+                          onClick={toggleTerminal}
+                          aria-label={language.t("command.terminal.toggle")}
+                          aria-expanded={view().terminal.opened()}
+                          aria-controls="terminal-panel"
+                        >
+                          <Icon size="small" name={view().terminal.opened() ? "terminal-active" : "terminal"} />
+                        </Button>
+                      </TooltipKeybind>
+                    </Show>
 
                     <div class="hidden md:flex items-center gap-1 shrink-0">
                       <TooltipKeybind

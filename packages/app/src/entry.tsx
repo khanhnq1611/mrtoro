@@ -14,6 +14,7 @@ import { authFromToken } from "@/utils/server"
 import pkg from "../package.json"
 import { ServerConnection } from "./context/server"
 import { useLayout } from "./context/layout"
+import { relayEnvironment } from "./utils/relay"
 
 const DEFAULT_SERVER_URL_KEY = "opencode.settings.dat:defaultServerUrl"
 
@@ -23,7 +24,6 @@ const DEFAULT_SERVER_URL_KEY = "opencode.settings.dat:defaultServerUrl"
 // In-app routes live in the hash (/env/<envID>/#/session/…): with a router
 // `base`, location.pathname would include the prefix and break the app's
 // comparisons against "/" and "/new-session".
-const relayEnvironment = location.pathname.match(/^\/env\/(env_[A-Za-z0-9]{16,64})(?:\/|$)/)?.[1]
 
 // mrtoro: parts of the SDK join paths like `new URL("/api/session", base)`,
 // which drops the /api/env/<envID> prefix. The app never calls the relay's own

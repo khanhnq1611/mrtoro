@@ -1,4 +1,5 @@
 import { createStore, produce, reconcile } from "solid-js/store"
+import { terminalAvailable } from "@/utils/relay"
 import { batch, createEffect, createMemo, onCleanup, onMount, type Accessor } from "solid-js"
 import { useLocation } from "@solidjs/router"
 import { createSimpleContext } from "@opencode-ai/ui/context"
@@ -817,11 +818,12 @@ export const { use: useLayout, provider: LayoutProvider } = createSimpleContext(
           const file = s().reviewFile
           if (typeof file === "string") return file
         })
-        const terminalOpened = createMemo(() => store.terminal?.opened ?? false)
+        const terminalOpened = createMemo(() => terminalAvailable && (store.terminal?.opened ?? false))
         const reviewPanelOpened = createMemo(() => store.review?.panelOpened ?? DEFAULT_REVIEW_PANEL_OPENED)
         const reviewPanelSource = createMemo(() => (reviewPanelOpened() ? ephemeral.reviewPanelSource : "other"))
 
         function setTerminalOpened(next: boolean) {
+          if (!terminalAvailable) return
           const current = store.terminal
           if (!current) {
             setStore("terminal", { height: DEFAULT_TERMINAL_HEIGHT, opened: next })
