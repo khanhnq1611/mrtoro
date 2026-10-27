@@ -22,8 +22,20 @@ export const Parameters = Schema.Struct({
 // `TodosParam` accepts unknown input so the JSON-string form decodes, which also erases the
 // shape from the JSON Schema generated off it. The model is shown this strict version instead,
 // so it keeps seeing what a todo looks like and writes a real array.
+//
+// `status` and `priority` are plain strings in Todo.Info because that schema is part of the HTTP
+// API. Narrowing them here is safe (every literal decodes against the runtime schema) and stops
+// the model inventing values like "in-progress" that nothing downstream recognises.
+const WireTodo = Schema.Struct({
+  content: Schema.String.annotate({ description: "Brief description of the task" }),
+  status: Schema.Literals(["pending", "in_progress", "completed", "cancelled"]).annotate({
+    description: "Current status of the task",
+  }),
+  priority: Schema.Literals(["high", "medium", "low"]).annotate({ description: "Priority level of the task" }),
+}).annotate({ identifier: "Todo" })
+
 export const WireParameters = Schema.Struct({
-  todos: TodoArray.annotate({ description: "The updated todo list" }),
+  todos: Schema.mutable(Schema.Array(WireTodo)).annotate({ description: "The updated todo list" }),
 })
 
 type Metadata = {

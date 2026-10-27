@@ -340,11 +340,22 @@ exports[`tool parameters JSON Schema (wire shape) todo 1`] = `
             "type": "string",
           },
           "priority": {
-            "description": "Priority level of the task: high, medium, low",
+            "description": "Priority level of the task",
+            "enum": [
+              "high",
+              "medium",
+              "low",
+            ],
             "type": "string",
           },
           "status": {
-            "description": "Current status of the task: pending, in_progress, completed, cancelled",
+            "description": "Current status of the task",
+            "enum": [
+              "pending",
+              "in_progress",
+              "completed",
+              "cancelled",
+            ],
             "type": "string",
           },
         },
