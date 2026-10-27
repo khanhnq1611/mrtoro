@@ -37,12 +37,12 @@ bun run script/build.ts --single --skip-install
 
 > `channel=latest` và `version=1.18.35` đã được hardcode làm default. Override bằng env var nếu cần: `OPENCODE_CHANNEL=... OPENCODE_VERSION=... bun run script/build.ts ...`
 
-Binary output: `packages/opencode/dist/mrtoro-linux-x64/bin/mrtoro`
+Binary output: `packages/opencode/dist/mrtoro-<os>-<arch>/bin/mrtoro` (e.g. `mrtoro-linux-x64`, `mrtoro-linux-arm64`)
 
-Add to PATH:
+Install it (a copy, since the next build wipes `dist/`):
 
 ```bash
-ln -sf "$(pwd)/packages/opencode/dist/mrtoro-linux-x64/bin/mrtoro" ~/.local/bin/mrtoro
+install -m 755 dist/mrtoro-linux-x64/bin/mrtoro ~/.local/bin/mrtoro
 ```
 
 ---
@@ -56,6 +56,21 @@ mrtoro --help       # all commands
 ```
 
 Press `ctrl+p` inside the TUI to list available actions.
+
+### Remote control
+
+Drive mrtoro on this machine from a browser, through a relay you host
+(`mrtoro_relay`; accounts are invite-only):
+
+```bash
+mrtoro remote-control login https://relay.example.com   # once per machine: approve the code in the browser
+mrtoro remote-control                                   # serve this directory; prints the web URL
+mrtoro remote-control --auto                            # also auto-approve permissions not explicitly denied
+mrtoro remote-control status | logout
+```
+
+Inside the TUI, `/remote-control` toggles the same thing for the running session, so the TUI and
+the web share it. The connection is outbound only and reconnects by itself.
 
 ---
 
