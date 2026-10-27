@@ -124,6 +124,11 @@ export const RemoteControlCommand = effectCmd({
       .option("name", {
         type: "string",
         describe: "machine name shown in the web UI (defaults to the hostname)",
+      })
+      .option("auto", {
+        type: "boolean",
+        describe: "auto-approve permissions that are not explicitly denied (dangerous!)",
+        default: false,
       }),
   // Requests carry x-opencode-directory, so no ambient instance is needed.
   instance: false,
@@ -143,6 +148,8 @@ export const RemoteControlCommand = effectCmd({
 
     UI.println(UI.Style.TEXT_NORMAL_BOLD + "Remote control" + UI.Style.TEXT_NORMAL, directory)
     UI.println(UI.Style.TEXT_DIM + `${credentials.email} · ${credentials.relay} · ${envID}` + UI.Style.TEXT_NORMAL)
+    if (args.auto)
+      UI.println(UI.Style.TEXT_WARNING_BOLD + "auto-approving permissions that are not explicitly denied" + UI.Style.TEXT_NORMAL)
 
     const exited = Promise.withResolvers<number>()
     const agent = RemoteAgent.start({
@@ -160,11 +167,26 @@ export const RemoteControlCommand = effectCmd({
       },
     })
 
+    const { RemoteAutoApprove } = yield* Effect.promise(() => import("../../remote/auto-approve"))
+    const stopAutoApprove = args.auto
+      ? RemoteAutoApprove.start({
+          fetch: (request) => Server.Default().app.fetch(request),
+          directory,
+          headers: () => ServerAuth.headers(),
+          onApprove: (approval) =>
+            UI.println(
+              UI.Style.TEXT_DIM + new Date().toLocaleTimeString() + UI.Style.TEXT_NORMAL,
+              `approved ${approval.permission}${approval.patterns.length ? `: ${approval.patterns.join(" ")}` : ""}`,
+            ),
+        })
+      : undefined
+
     const shutdown = () => exited.resolve(0)
     process.once("SIGINT", shutdown)
     process.once("SIGTERM", shutdown)
 
     const code = yield* Effect.promise(() => exited.promise)
+    stopAutoApprove?.()
     yield* Effect.promise(() => agent.stop())
     yield* Effect.promise(() => InstanceRuntime.disposeAllInstances())
     process.exitCode = code
