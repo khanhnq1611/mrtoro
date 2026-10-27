@@ -135,11 +135,27 @@ const appBindingCommands = [
   "app.toggle.session_directory_filter",
 ] as const
 
+// Sharing this TUI's sessions through the mrtoro relay. The host runs the
+// agent next to the server, so the web and the TUI drive the same sessions.
+export type RemoteControlStatus =
+  | { type: "off" }
+  | { type: "connecting" }
+  | { type: "online"; url: string }
+  | { type: "reconnecting"; reason: string; delay: number }
+  | { type: "failed"; message: string }
+
+export type RemoteControlHost = {
+  start(): Promise<unknown>
+  stop(): Promise<unknown>
+  onStatus(listener: (status: RemoteControlStatus) => void): () => void
+}
+
 export type TuiInput = {
   url: string
   args: Args
   config: TuiConfig.Resolved
   onSnapshot?: () => Promise<string[]>
+  remoteControl?: RemoteControlHost
   directory?: string
   fetch?: typeof fetch
   headers?: RequestInit["headers"]
@@ -296,6 +312,7 @@ export const run = Effect.fn("Tui.run")(function* (input: TuiInput) {
                                                                   <LocationProvider>
                                                                     <App
                                                                       onSnapshot={input.onSnapshot}
+                                                                      remoteControl={input.remoteControl}
                                                                       pluginHost={input.pluginHost}
                                                                     />
                                                                   </LocationProvider>
@@ -343,7 +360,11 @@ export const run = Effect.fn("Tui.run")(function* (input: TuiInput) {
   })
 })
 
-function App(props: { onSnapshot?: () => Promise<string[]>; pluginHost: TuiPluginHost }) {
+function App(props: {
+  onSnapshot?: () => Promise<string[]>
+  remoteControl?: RemoteControlHost
+  pluginHost: TuiPluginHost
+}) {
   const startup = useTuiStartup()
   const tuiConfig = useTuiConfig()
   const route = useRoute()
@@ -527,6 +548,26 @@ function App(props: { onSnapshot?: () => Promise<string[]>; pluginHost: TuiPlugi
         dialog.replace(() => <DialogProviderList />)
       },
     ),
+  )
+
+  const [remote, setRemote] = createSignal<RemoteControlStatus>({ type: "off" })
+  const remoteActive = () => remote().type !== "off" && remote().type !== "failed"
+  onCleanup(
+    props.remoteControl?.onStatus((next) => {
+      const previous = remote()
+      setRemote(next)
+      const shown =
+        next.type === "online"
+          ? { variant: "success" as const, message: `Remote control on: ${next.url}`, duration: 10_000 }
+          : next.type === "reconnecting" && previous.type === "online"
+            ? { variant: "warning" as const, message: `Remote control reconnecting: ${next.reason}` }
+            : next.type === "failed"
+              ? { variant: "error" as const, message: `Remote control: ${next.message}`, duration: 10_000 }
+              : next.type === "off" && previous.type !== "off" && previous.type !== "failed"
+                ? { variant: "info" as const, message: "Remote control off" }
+                : undefined
+      if (shown) toast.show(shown)
+    }) ?? (() => {}),
   )
 
   const connected = useConnected()
@@ -915,6 +956,20 @@ function App(props: { onSnapshot?: () => Promise<string[]>; pluginHost: TuiPlugi
           dialog.clear()
         },
       },
+      ...(props.remoteControl
+        ? [
+            {
+              name: "remote.control",
+              title: remoteActive() ? "Stop remote control" : "Start remote control",
+              category: "System",
+              slashName: "remote-control",
+              run: () => {
+                dialog.clear()
+                void (remoteActive() ? props.remoteControl?.stop() : props.remoteControl?.start())
+              },
+            },
+          ]
+        : []),
       {
         name: "permission.mode",
         title:

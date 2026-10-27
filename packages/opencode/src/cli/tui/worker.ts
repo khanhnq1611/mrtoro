@@ -9,6 +9,7 @@ import { Heap } from "@/cli/heap"
 import { AppRuntime } from "@/effect/app-runtime"
 import { Effect } from "effect"
 import { disposeAllInstancesAndEmitGlobalDisposed } from "@/server/global-lifecycle"
+import { RemoteHost } from "@/remote/host"
 
 Heap.start()
 
@@ -25,6 +26,14 @@ GlobalBus.on("event", (event) => {
 })
 
 let server: Awaited<ReturnType<typeof Server.listen>> | undefined
+
+// /remote-control runs the relay agent here, next to the server, so the web
+// and the TUI drive the same sessions.
+const remote = RemoteHost.create({
+  fetch: (request) => Server.Default().app.fetch(request),
+  headers: () => ServerAuth.headers(),
+  emit: (status) => Rpc.emit("remote.status", status),
+})
 
 export const rpc = {
   async fetch(input: { url: string; method: string; headers: Record<string, string>; body?: string }) {
@@ -46,6 +55,12 @@ export const rpc = {
       body,
     }
   },
+  remoteStart(input: { directory: string; name: string }) {
+    return remote.start(input)
+  },
+  remoteStop() {
+    return remote.stop()
+  },
   snapshot() {
     const result = writeHeapSnapshot("server.heapsnapshot")
     return result
@@ -65,6 +80,7 @@ export const rpc = {
     )
   },
   async shutdown() {
+    await remote.stop()
     await InstanceRuntime.disposeAllInstances()
     if (server) await server.stop(true)
     process.off("unhandledRejection", onUnhandledRejection)

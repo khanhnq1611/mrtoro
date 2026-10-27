@@ -10,6 +10,8 @@ import { withNetworkOptions, resolveNetworkOptionsNoConfig, hasArg } from "@/cli
 import { Filesystem } from "@/util/filesystem"
 import type { GlobalEvent } from "@opencode-ai/sdk/v2"
 import type { EventSource } from "@opencode-ai/tui/context/sdk"
+import type { RemoteControlStatus } from "@opencode-ai/tui"
+import os from "os"
 import { writeHeapSnapshot } from "v8"
 import { ServerAuth } from "@/server/auth"
 import { validateSession } from "../tui/validate-session"
@@ -276,6 +278,11 @@ export const TuiThreadCommand = cmd({
             },
             config,
             pluginHost: createLegacyTuiPluginHost(),
+            remoteControl: {
+              start: () => client.call("remoteStart", { directory: cwd, name: os.hostname() }),
+              stop: () => client.call("remoteStop", undefined),
+              onStatus: (listener) => client.on<RemoteControlStatus>("remote.status", listener),
+            },
             directory: cwd,
             fetch: transport.fetch,
             headers: transport.headers,

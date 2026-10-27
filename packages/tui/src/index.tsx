@@ -1,1 +1,1 @@
-export { run, type TuiInput } from "./app"
+export { run, type TuiInput, type RemoteControlHost, type RemoteControlStatus } from "./app"
