@@ -13,6 +13,7 @@ BRANCH=${MRTORO_BRANCH:-remote-control}
 SRC=${MRTORO_SRC:-${XDG_DATA_HOME:-$HOME/.local/share}/mrtoro-src}
 BIN_DIR=${MRTORO_BIN_DIR:-}
 MODIFY_PATH=true
+USER_PATH=$PATH # the private Bun is prepended later; never install next to it
 
 usage() {
   cat <<EOF
@@ -134,10 +135,10 @@ rm -f "$LOG"
 # --- install ------------------------------------------------------------------
 # Prefer a user-writable directory that is already on PATH, so nothing needs editing.
 if [[ -z $BIN_DIR ]]; then
-  IFS=: read -ra path_dirs <<<"$PATH"
+  IFS=: read -ra path_dirs <<<"$USER_PATH"
   for dir in "$HOME/.local/bin" "$HOME/bin" "${path_dirs[@]}"; do
     [[ $dir == "$HOME"/* && $dir != "${BUN_INSTALL:-$HOME/.bun}"/* && -d $dir && -w $dir ]] || continue
-    [[ ":$PATH:" == *":$dir:"* ]] && { BIN_DIR=$dir; break; }
+    [[ ":$USER_PATH:" == *":$dir:"* ]] && { BIN_DIR=$dir; break; }
   done
   BIN_DIR=${BIN_DIR:-$HOME/.local/bin}
 fi
@@ -149,7 +150,7 @@ mv -f "$BIN_DIR/.mrtoro.new" "$BIN_DIR/mrtoro"
 step "Installed $BIN_DIR/mrtoro ($("$BIN_DIR/mrtoro" --version))"
 
 # --- PATH ---------------------------------------------------------------------
-if [[ ":$PATH:" != *":$BIN_DIR:"* ]]; then
+if [[ ":$USER_PATH:" != *":$BIN_DIR:"* ]]; then
   shell_name=$(basename "${SHELL:-bash}")
   case $shell_name in
     zsh) rc=${ZDOTDIR:-$HOME}/.zshrc; line="export PATH=\"$BIN_DIR:\$PATH\"" ;;
