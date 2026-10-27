@@ -69,6 +69,9 @@ fi
 step "Installing mrtoro ($BRANCH) as $TARGET"
 
 # --- requirements -------------------------------------------------------------
+LOG=$(mktemp -t mrtoro-install.XXXXXX)
+quiet() { "$@" >"$LOG" 2>&1 || { tail -n 30 "$LOG" >&2; return 1; }; }
+
 missing=()
 for tool in git curl unzip; do command -v "$tool" >/dev/null || missing+=("$tool"); done
 if (( ${#missing[@]} )); then
@@ -76,14 +79,6 @@ if (( ${#missing[@]} )); then
     sudo apt install ${missing[*]}      # Debian / Ubuntu / Raspberry Pi OS
     sudo dnf install ${missing[*]}      # Fedora"
 fi
-
-export PATH="${BUN_INSTALL:-$HOME/.bun}/bin:$PATH"
-if ! command -v bun >/dev/null; then
-  step "Installing Bun"
-  curl -fsSL https://bun.sh/install | bash >/dev/null
-  command -v bun >/dev/null || die "Bun installation failed; see https://bun.sh"
-fi
-info "bun $(bun --version)"
 
 # --- source -------------------------------------------------------------------
 if [[ -d $SRC/.git ]]; then
@@ -98,10 +93,29 @@ else
 fi
 info "commit $(git -C "$SRC" log -1 --format='%h %s')"
 
-# --- build --------------------------------------------------------------------
-LOG=$(mktemp -t mrtoro-install.XXXXXX)
-quiet() { "$@" >"$LOG" 2>&1 || { tail -n 30 "$LOG" >&2; return 1; }; }
+# --- bun ----------------------------------------------------------------------
+# Build with the exact Bun the repo pins. A different system Bun is left alone:
+# the pinned one goes into a private directory, without touching shell config.
+BUN_VERSION=$(sed -n 's/.*"packageManager": *"bun@\([^"]*\)".*/\1/p' "$SRC/package.json")
+[[ -n $BUN_VERSION ]] || die "could not read the pinned Bun version from $SRC/package.json"
+if ! command -v bun >/dev/null || [[ $(bun --version) != "$BUN_VERSION" ]]; then
+  BUN_DIR=${XDG_DATA_HOME:-$HOME/.local/share}/mrtoro-bun
+  if [[ ! -x $BUN_DIR/bin/bun || $("$BUN_DIR/bin/bun" --version) != "$BUN_VERSION" ]]; then
+    step "Downloading Bun $BUN_VERSION"
+    zip=bun-linux-$([[ $ARCH == arm64 ]] && echo aarch64 || echo x64)$([[ $TARGET == *baseline ]] && echo -baseline).zip
+    tmp=$(mktemp -d)
+    curl -fsSL -o "$tmp/bun.zip" "https://github.com/oven-sh/bun/releases/download/bun-v$BUN_VERSION/$zip" ||
+      die "could not download Bun $BUN_VERSION ($zip)"
+    unzip -q -o "$tmp/bun.zip" -d "$tmp"
+    mkdir -p "$BUN_DIR/bin"
+    mv -f "$tmp/${zip%.zip}/bun" "$BUN_DIR/bin/bun"
+    rm -rf "$tmp"
+  fi
+  export PATH="$BUN_DIR/bin:$PATH"
+fi
+info "bun $(bun --version)"
 
+# --- build --------------------------------------------------------------------
 step "Installing dependencies (first run takes a few minutes)"
 # A package install script occasionally fails on a fresh download; one retry clears it.
 (cd "$SRC" && bun install --frozen-lockfile >"$LOG" 2>&1) ||
