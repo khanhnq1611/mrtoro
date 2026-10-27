@@ -71,10 +71,12 @@ Minimal example with a local OpenAI-compatible server:
   "provider": {
     "etprovider": {
       "name": "Local GLM",
-      "type": "openai-compatible",
+      "npm": "@ai-sdk/openai-compatible",
       "options": {
-        "baseURL": "http://127.0.0.1:30005/v1",
-        "models": ["glm-5.3-nvfp4"]
+        "baseURL": "http://127.0.0.1:30005/v1"
+      },
+      "models": {
+        "glm-5.3-nvfp4": { "name": "GLM 5.3" }
       }
     }
   },
