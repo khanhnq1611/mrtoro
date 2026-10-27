@@ -23,7 +23,7 @@ Runs entirely on your machine. Connects to any LLM provider via API key or a loc
 Linux on x86_64 (amd64) or aarch64 (arm64, e.g. Raspberry Pi), with `git`, `curl` and `unzip`:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/remote-control/install | bash && exec "$SHELL"
+curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/main/install | bash && exec "$SHELL"
 ```
 
 Then run `mrtoro` in the same terminal. The trailing `exec "$SHELL"` restarts your shell so it
@@ -44,9 +44,9 @@ The script:
 Run the same command again to update. Options go after `bash -s --`:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/remote-control/install | bash -s -- --bin-dir ~/bin && exec "$SHELL"
+curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/main/install | bash -s -- --bin-dir ~/bin && exec "$SHELL"
 #   --bin-dir <dir>    install the binary here
-#   --branch <name>    build another branch (default: remote-control)
+#   --branch <name>    build another branch (default: main)
 #   --src <dir>        keep the source elsewhere
 #   --no-modify-path   never edit shell config files
 ```
@@ -58,15 +58,14 @@ Check it: `mrtoro --version`. Alpine and other musl systems are not supported.
 
 ```bash
 curl -fsSL https://bun.sh/install | bash          # Bun; the repo pins the version in package.json
-git clone -b remote-control https://github.com/khanhnq1611/mrtoro.git && cd mrtoro
+git clone https://github.com/khanhnq1611/mrtoro.git && cd mrtoro
 bun install
 cd packages/opencode
 bun run script/build.ts --single --skip-install   # add --baseline on x64 CPUs without AVX2
 install -m 755 dist/mrtoro-linux-$(uname -m | sed 's/x86_64/x64/;s/aarch64/arm64/')/bin/mrtoro ~/.local/bin/mrtoro
 ```
 
-Remote control lives on the `remote-control` branch. `channel=latest` and `version=1.18.35` are
-the build defaults; override them with `OPENCODE_CHANNEL=... OPENCODE_VERSION=...`.
+`channel=latest` and `version=1.18.35` are the build defaults; override them with `OPENCODE_CHANNEL=... OPENCODE_VERSION=...`.
 
 </details>
 

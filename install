@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # mrtoro installer for Linux (x86_64 / amd64 and aarch64 / arm64).
 #
-#   curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/remote-control/install | bash && exec "$SHELL"
+#   curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/main/install | bash && exec "$SHELL"
 #
 # There are no prebuilt releases: this clones the repo, builds the binary for
 # this machine with Bun, and puts `mrtoro` in a directory on your PATH. Run it
@@ -14,7 +14,7 @@
 set -euo pipefail
 
 REPO=${MRTORO_REPO:-https://github.com/khanhnq1611/mrtoro.git}
-BRANCH=${MRTORO_BRANCH:-remote-control}
+BRANCH=${MRTORO_BRANCH:-main}
 SRC=${MRTORO_SRC:-${XDG_DATA_HOME:-$HOME/.local/share}/mrtoro-src}
 BIN_DIR=${MRTORO_BIN_DIR:-}
 MODIFY_PATH=true
@@ -35,7 +35,7 @@ Options:
   -h, --help            show this help
 
 Example:
-  curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/remote-control/install | bash -s -- --bin-dir ~/bin && exec "\$SHELL"
+  curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/main/install | bash -s -- --bin-dir ~/bin && exec "\$SHELL"
 EOF
 }
 
