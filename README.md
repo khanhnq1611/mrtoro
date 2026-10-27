@@ -23,8 +23,12 @@ Runs entirely on your machine. Connects to any LLM provider via API key or a loc
 Linux on x86_64 (amd64) or aarch64 (arm64, e.g. Raspberry Pi), with `git`, `curl` and `unzip`:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/remote-control/install | bash
+curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/remote-control/install | bash && exec "$SHELL"
 ```
+
+Then run `mrtoro` in the same terminal. The trailing `exec "$SHELL"` restarts your shell so it
+picks up the new `PATH`: a piped script cannot change the environment of the terminal that ran it,
+so sourcing `~/.bashrc` from inside the installer would not help.
 
 The script:
 
@@ -35,12 +39,12 @@ The script:
 - keeps the source in `~/.local/share/mrtoro-src`;
 - installs `mrtoro` into a writable directory that is already on your `PATH` (`~/.local/bin` or
   `~/bin` first). If none is, it uses `~/.local/bin` and adds it to your shell config
-  (`.bashrc`, `.zshrc`, fish `config.fish`, or `.profile`). Open a new terminal afterwards.
+  (`.bashrc`, `.zshrc`, fish `config.fish`, or `.profile`).
 
 Run the same command again to update. Options go after `bash -s --`:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/remote-control/install | bash -s -- --bin-dir ~/bin
+curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/remote-control/install | bash -s -- --bin-dir ~/bin && exec "$SHELL"
 #   --bin-dir <dir>    install the binary here
 #   --branch <name>    build another branch (default: remote-control)
 #   --src <dir>        keep the source elsewhere

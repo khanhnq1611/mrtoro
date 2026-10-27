@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
 # mrtoro installer for Linux (x86_64 / amd64 and aarch64 / arm64).
 #
-#   curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/remote-control/install | bash
+#   curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/remote-control/install | bash && exec "$SHELL"
 #
 # There are no prebuilt releases: this clones the repo, builds the binary for
 # this machine with Bun, and puts `mrtoro` in a directory on your PATH. Run it
 # again to update.
+#
+# A piped script runs in a child process and cannot change the PATH of the
+# terminal that started it (sourcing ~/.bashrc here would only affect this
+# process). When the PATH had to be added to a shell config file, the trailing
+# `exec "$SHELL"` restarts the user's shell so it reads that file.
 set -euo pipefail
 
 REPO=${MRTORO_REPO:-https://github.com/khanhnq1611/mrtoro.git}
@@ -30,7 +35,7 @@ Options:
   -h, --help            show this help
 
 Example:
-  curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/remote-control/install | bash -s -- --bin-dir ~/bin
+  curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/remote-control/install | bash -s -- --bin-dir ~/bin && exec "\$SHELL"
 EOF
 }
 
@@ -164,14 +169,19 @@ if [[ ":$USER_PATH:" != *":$BIN_DIR:"* ]]; then
       printf '\n# mrtoro\n%s\n' "$line" >>"$rc"
       step "Added $BIN_DIR to PATH in $rc"
     fi
-    info "open a new terminal, or run:  $line"
+    PATH_ADDED=$rc
   else
     info "$BIN_DIR is not on PATH; add it with:  $line"
   fi
 fi
 
 echo
-echo -e "${GREEN}mrtoro is ready.${NC} Next:"
+if [[ -n ${PATH_ADDED:-} ]]; then
+  echo -e "${GREEN}mrtoro is installed.${NC} This terminal does not see it yet: run ${BOLD}exec \$SHELL${NC}"
+  echo "(the one-line install command does that for you) or open a new terminal. Next:"
+else
+  echo -e "${GREEN}mrtoro is ready.${NC} Next:"
+fi
 echo "  1. Add a provider in ~/.config/mrtoro/mrtoro.jsonc (see the README's Configuration section)"
 echo "  2. Run: mrtoro"
 echo "  Remote control: mrtoro remote-control login <relay-url>"
