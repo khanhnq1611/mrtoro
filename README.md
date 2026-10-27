@@ -13,7 +13,7 @@ Runs entirely on your machine. Connects to any LLM provider via API key or a loc
 - **Gamma agent** — the primary coding agent; runs in a persistent session with full tool access
 - **Subagents** — `general` and `explore` for delegated work
 - **Built-in tools** — bash, read, edit, write, glob, grep, webfetch, websearch (Exa), LSP, formatters, MCP
-- **Skills** — lazy-loaded Markdown knowledge files; `mrtoro-docs` ships built-in
+- **Skills** — lazy-loaded Markdown knowledge files; the full mrtoro reference is the `mrtoro-docs/` skill in this repo (see [Configuration](#configuration))
 - **Sessions** — stored locally in SQLite at `~/.local/share/mrtoro/`
 
 ---
@@ -145,12 +145,15 @@ Minimal example with a local OpenAI-compatible server:
   },
   "model": "etprovider/glm-5.3-nvfp4",
   "skills": {
-    "paths": ["/path/to/mrtoro-docs"]
+    "paths": ["/absolute/path/to/your/mrtoro/clone/mrtoro-docs"]
   }
 }
 ```
 
 Other providers (Anthropic, OpenAI, etc.) use the standard `apiKey` option. See `mrtoro-docs` skill for the full config reference.
+
+`mrtoro-docs` is not compiled into the binary: keep your clone and point `skills.paths` at its
+`mrtoro-docs/` folder, as above, so the agent can answer questions about configuring mrtoro.
 
 ---
 
@@ -178,7 +181,7 @@ packages/
   tui/         — terminal UI (SolidJS + opentui)
   sdk/         — JS/TS SDK for headless use
   schema/      — shared types (Effect Schema)
-mrtoro-docs/   — built-in documentation skill
+mrtoro-docs/   — documentation skill (load it via skills.paths)
 ```
 
 ---
