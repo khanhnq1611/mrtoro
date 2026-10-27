@@ -20,34 +20,51 @@ Runs entirely on your machine. Connects to any LLM provider via API key or a loc
 
 ## Installation
 
-**1. Install Bun** (if not already installed):
+Linux on x86_64 (amd64) or aarch64 (arm64, e.g. Raspberry Pi), with `git`, `curl` and `unzip`:
 
 ```bash
-curl -fsSL https://bun.sh/install | bash
+curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/remote-control/install | bash
 ```
 
-**2. Clone and build:**
+The script:
+
+- detects the CPU (x64, x64 without AVX2, or arm64) and builds the matching binary from source;
+  there are no prebuilt releases, so the first run takes a few minutes;
+- builds with the exact Bun version the repo pins, downloaded privately to
+  `~/.local/share/mrtoro-bun` if your system Bun differs (your own Bun is not touched);
+- keeps the source in `~/.local/share/mrtoro-src`;
+- installs `mrtoro` into a writable directory that is already on your `PATH` (`~/.local/bin` or
+  `~/bin` first). If none is, it uses `~/.local/bin` and adds it to your shell config
+  (`.bashrc`, `.zshrc`, fish `config.fish`, or `.profile`). Open a new terminal afterwards.
+
+Run the same command again to update. Options go after `bash -s --`:
 
 ```bash
+curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/remote-control/install | bash -s -- --bin-dir ~/bin
+#   --bin-dir <dir>    install the binary here
+#   --branch <name>    build another branch (default: remote-control)
+#   --src <dir>        keep the source elsewhere
+#   --no-modify-path   never edit shell config files
+```
+
+Check it: `mrtoro --version`. Alpine and other musl systems are not supported.
+
+<details>
+<summary>Build by hand</summary>
+
+```bash
+curl -fsSL https://bun.sh/install | bash          # Bun; the repo pins the version in package.json
 git clone -b remote-control https://github.com/khanhnq1611/mrtoro.git && cd mrtoro
 bun install
 cd packages/opencode
-bun run script/build.ts --single --skip-install
+bun run script/build.ts --single --skip-install   # add --baseline on x64 CPUs without AVX2
+install -m 755 dist/mrtoro-linux-$(uname -m | sed 's/x86_64/x64/;s/aarch64/arm64/')/bin/mrtoro ~/.local/bin/mrtoro
 ```
 
-> Remote control lives on the `remote-control` branch until it is merged into `main`.
+Remote control lives on the `remote-control` branch. `channel=latest` and `version=1.18.35` are
+the build defaults; override them with `OPENCODE_CHANNEL=... OPENCODE_VERSION=...`.
 
-> `channel=latest` và `version=1.18.35` đã được hardcode làm default. Override bằng env var nếu cần: `OPENCODE_CHANNEL=... OPENCODE_VERSION=... bun run script/build.ts ...`
-
-Binary output: `packages/opencode/dist/mrtoro-<os>-<arch>/bin/mrtoro` (e.g. `mrtoro-linux-x64`, `mrtoro-linux-arm64`)
-
-Install it (a copy, since the next build wipes `dist/`):
-
-```bash
-install -m 755 dist/mrtoro-linux-x64/bin/mrtoro ~/.local/bin/mrtoro
-```
-
-Check it: `mrtoro --version` and `mrtoro remote-control --help`.
+</details>
 
 ---
 
@@ -145,15 +162,15 @@ Minimal example with a local OpenAI-compatible server:
   },
   "model": "etprovider/glm-5.3-nvfp4",
   "skills": {
-    "paths": ["/absolute/path/to/your/mrtoro/clone/mrtoro-docs"]
+    "paths": ["~/.local/share/mrtoro-src/mrtoro-docs"]
   }
 }
 ```
 
 Other providers (Anthropic, OpenAI, etc.) use the standard `apiKey` option. See `mrtoro-docs` skill for the full config reference.
 
-`mrtoro-docs` is not compiled into the binary: keep your clone and point `skills.paths` at its
-`mrtoro-docs/` folder, as above, so the agent can answer questions about configuring mrtoro.
+`mrtoro-docs` is not compiled into the binary: point `skills.paths` at the `mrtoro-docs/` folder
+of the source checkout (the installer keeps it in `~/.local/share/mrtoro-src`), as above, so the agent can answer questions about configuring mrtoro.
 
 ---
 
