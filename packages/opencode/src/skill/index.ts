@@ -7,6 +7,7 @@ import { EventV2Bridge } from "@/event-v2-bridge"
 import { InstanceState } from "@/effect/instance-state"
 import { Global } from "@opencode-ai/core/global"
 import { SkillPlugin } from "@opencode-ai/core/plugin/skill"
+import { MrtoroDocs } from "@opencode-ai/core/plugin/skill/mrtoro-docs"
 import { Permission } from "@/permission"
 import { FSUtil } from "@opencode-ai/core/fs-util"
 import { Config } from "@/config/config"
@@ -269,13 +270,19 @@ const layer = Layer.effect(
     const state = yield* InstanceState.make(
       Effect.fn("Skill.state")(function* () {
         const s: State = { skills: {}, dirs: new Set() }
-        // Register the built-in skill BEFORE disk discovery so a user-disk
-        // skill with the same name can override it.
+        // Register the built-in skills BEFORE disk discovery so a user-disk
+        // skill with the same name can override one of them.
         s.skills[CUSTOMIZE_OPENCODE_SKILL_NAME] = {
           name: CUSTOMIZE_OPENCODE_SKILL_NAME,
           description: CUSTOMIZE_OPENCODE_SKILL_DESCRIPTION,
           location: "<built-in>",
           content: CUSTOMIZE_OPENCODE_SKILL_BODY,
+        }
+        s.skills["mrtoro-docs"] = {
+          name: "mrtoro-docs",
+          description: MrtoroDocs.description,
+          location: MrtoroDocs.location() ?? "<built-in>",
+          content: MrtoroDocs.content,
         }
         yield* loadSkills(s, yield* InstanceState.get(discovered), events)
         return s

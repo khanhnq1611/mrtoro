@@ -16,6 +16,9 @@ import fs from "fs/promises"
 
 const node = LayerNode.compile(CrossSpawnSpawner.node)
 
+// Built-ins are registered in every instance; most tests only look at discovered skills.
+const discovered = (skill: Skill.Info) => !["customize-mrtoro", "mrtoro-docs"].includes(skill.name)
+
 const it = testEffect(Layer.mergeAll(LayerNode.compile(Skill.node), node, testInstanceStoreLayer))
 const itWithoutClaudeCodeSkills = testEffect(
   Layer.mergeAll(
@@ -111,7 +114,7 @@ Instructions here.
           )
 
           const skill = yield* Skill.Service
-          const list = (yield* skill.all()).filter((s) => s.location !== "<built-in>")
+          const list = (yield* skill.all()).filter(discovered)
           expect(list.length).toBe(1)
           const item = list.find((x) => x.name === "test-skill")
           expect(item).toBeDefined()
@@ -181,7 +184,7 @@ description: Second test skill.
           )
 
           const skill = yield* Skill.Service
-          const list = (yield* skill.all()).filter((s) => s.location !== "<built-in>")
+          const list = (yield* skill.all()).filter(discovered)
           expect(list.length).toBe(2)
           expect(list.find((x) => x.name === "skill-one")).toBeDefined()
           expect(list.find((x) => x.name === "skill-two")).toBeDefined()
@@ -205,7 +208,7 @@ Just some content without YAML frontmatter.
           )
 
           const skill = yield* Skill.Service
-          expect((yield* skill.all()).filter((s) => s.location !== "<built-in>")).toEqual([])
+          expect((yield* skill.all()).filter(discovered)).toEqual([])
         }),
       { git: true },
     ),
@@ -230,7 +233,7 @@ Instructions here.
           )
 
           const skill = yield* Skill.Service
-          const list = (yield* skill.all()).filter((s) => s.location !== "<built-in>")
+          const list = (yield* skill.all()).filter(discovered)
           expect(list.length).toBe(1)
           const item = list.find((x) => x.name === "manual-skill")
           expect(item).toBeDefined()
@@ -261,7 +264,7 @@ description: A skill in the .claude/skills directory.
           )
 
           const skill = yield* Skill.Service
-          const list = (yield* skill.all()).filter((s) => s.location !== "<built-in>")
+          const list = (yield* skill.all()).filter(discovered)
           expect(list.length).toBe(0)
         }),
       { git: true },
@@ -281,7 +284,7 @@ description: A skill in the .claude/skills directory.
           yield* Effect.promise(() => createGlobalSkill(tmp.path))
           yield* Effect.gen(function* () {
             const skill = yield* Skill.Service
-            const list = (yield* skill.all()).filter((s) => s.location !== "<built-in>")
+            const list = (yield* skill.all()).filter(discovered)
             expect(list.length).toBe(0)
           }).pipe(provideInstance(tmp.path))
         }),
@@ -294,7 +297,7 @@ description: A skill in the .claude/skills directory.
       () =>
         Effect.gen(function* () {
           const skill = yield* Skill.Service
-          expect((yield* skill.all()).filter((s) => s.location !== "<built-in>")).toEqual([])
+          expect((yield* skill.all()).filter(discovered)).toEqual([])
         }),
       { git: true },
     ),
@@ -349,7 +352,7 @@ description: A skill in the .agents/skills directory.
           )
 
           const skill = yield* Skill.Service
-          const list = (yield* skill.all()).filter((s) => s.location !== "<built-in>")
+          const list = (yield* skill.all()).filter(discovered)
           expect(list.length).toBe(1)
           const item = list.find((x) => x.name === "agent-skill")
           expect(item).toBeDefined()
@@ -388,7 +391,7 @@ This skill is loaded from the global home directory.
 
           yield* Effect.gen(function* () {
             const skill = yield* Skill.Service
-            const list = (yield* skill.all()).filter((s) => s.location !== "<built-in>")
+            const list = (yield* skill.all()).filter(discovered)
             expect(list.length).toBe(1)
             expect(list[0].name).toBe("global-agent-skill")
             expect(list[0].description).toBe("A global skill from ~/.agents/skills for testing.")
@@ -429,7 +432,7 @@ description: A skill in the .agents/skills directory.
           )
 
           const skill = yield* Skill.Service
-          const list = (yield* skill.all()).filter((s) => s.location !== "<built-in>")
+          const list = (yield* skill.all()).filter(discovered)
           expect(list.length).toBe(1)
           expect(list.find((x) => x.name === "claude-skill")).toBeUndefined()
           expect(list.find((x) => x.name === "agent-skill")).toBeDefined()
@@ -468,7 +471,7 @@ description: A skill in the .agents/skills directory.
           )
 
           const skill = yield* Skill.Service
-          const list = (yield* skill.all()).filter((s) => s.location !== "<built-in>")
+          const list = (yield* skill.all()).filter(discovered)
           expect(list.map((s) => s.name)).toEqual(["agent-skill"])
         }),
       { git: true },
@@ -515,7 +518,7 @@ description: A skill in the .opencode/skill directory.
           )
 
           const skill = yield* Skill.Service
-          const list = (yield* skill.all()).filter((s) => s.location !== "<built-in>")
+          const list = (yield* skill.all()).filter(discovered)
           expect(list.map((s) => s.name)).toEqual(["opencode-skill"])
         }),
       { git: true },
@@ -573,6 +576,50 @@ description: A skill in the .opencode/skills directory.
 
           const skill = yield* Skill.Service
           expect((yield* skill.dirs()).length).toBe(3)
+        }),
+      { git: true },
+    ),
+  )
+})
+
+describe("built-in skills", () => {
+  // mrtoro-docs tells the model to read reference/ next to SKILL.md, so it needs a real folder.
+  it.live("mrtoro-docs points at an extracted copy with its reference files", () =>
+    provideTmpdirInstance(
+      () =>
+        Effect.gen(function* () {
+          const skill = yield* Skill.Service
+          const docs = yield* skill.require("mrtoro-docs")
+          expect(path.basename(docs.location)).toBe("SKILL.md")
+          expect(docs.content).toContain("reference/config.md")
+          const reference = path.join(path.dirname(docs.location), "reference")
+          expect(yield* Effect.promise(() => Bun.file(path.join(reference, "config.md")).text())).toContain("mrtoro")
+          expect(yield* Effect.promise(() => Bun.file(path.join(reference, "config-schema.json")).json())).toHaveProperty("$defs")
+        }),
+      { git: true },
+    ),
+  )
+
+  it.live("a disk skill named mrtoro-docs replaces the built-in", () =>
+    provideTmpdirInstance(
+      (dir) =>
+        Effect.gen(function* () {
+          yield* Effect.promise(() =>
+            Bun.write(
+              path.join(dir, ".opencode", "skill", "mrtoro-docs", "SKILL.md"),
+              `---
+name: mrtoro-docs
+description: My own copy of the mrtoro docs that replaces the built-in one.
+---
+
+# Mine
+`,
+            ),
+          )
+          const skill = yield* Skill.Service
+          const docs = yield* skill.require("mrtoro-docs")
+          expect(docs.location).toBe(path.join(dir, ".opencode", "skill", "mrtoro-docs", "SKILL.md"))
+          expect(docs.description).toContain("replaces the built-in")
         }),
       { git: true },
     ),

@@ -13,7 +13,7 @@ Runs entirely on your machine. Connects to any LLM provider via API key or a loc
 - **Gamma agent** — the primary coding agent; runs in a persistent session with full tool access
 - **Subagents** — `general` and `explore` for delegated work
 - **Built-in tools** — bash, read, edit, write, glob, grep, webfetch, websearch (Exa), LSP, formatters, MCP
-- **Skills** — lazy-loaded Markdown knowledge files; the full mrtoro reference is the `mrtoro-docs/` skill in this repo (see [Configuration](#configuration))
+- **Skills** — lazy-loaded Markdown knowledge files; `mrtoro-docs` (the full mrtoro reference) and `customize-mrtoro` ship inside the binary
 - **Sessions** — stored locally in SQLite at `~/.local/share/mrtoro/`
 
 ---
@@ -164,17 +164,15 @@ Minimal example with a local OpenAI-compatible server:
       }
     }
   },
-  "model": "etprovider/glm-5.3-nvfp4",
-  "skills": {
-    "paths": ["~/.local/share/mrtoro-src/mrtoro-docs"]
-  }
+  "model": "etprovider/glm-5.3-nvfp4"
 }
 ```
 
 Other providers (Anthropic, OpenAI, etc.) use the standard `apiKey` option. See `mrtoro-docs` skill for the full config reference.
 
-`mrtoro-docs` is not compiled into the binary: point `skills.paths` at the `mrtoro-docs/` folder
-of the source checkout (the installer keeps it in `~/.local/share/mrtoro-src`), as above, so the agent can answer questions about configuring mrtoro.
+`mrtoro-docs` is compiled into the binary, so there is nothing to configure for it: on first use
+mrtoro writes its reference files to `~/.cache/mrtoro/skills/`, where the agent reads them. A skill
+of the same name on disk (for example via `skills.paths`) replaces the built-in copy.
 
 ---
 
@@ -202,7 +200,7 @@ packages/
   tui/         — terminal UI (SolidJS + opentui)
   sdk/         — JS/TS SDK for headless use
   schema/      — shared types (Effect Schema)
-mrtoro-docs/   — documentation skill (load it via skills.paths)
+mrtoro-docs/   — documentation skill, compiled into the binary
 ```
 
 ---
