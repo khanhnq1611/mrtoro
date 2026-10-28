@@ -1,3 +1,5 @@
+import type { ProviderConfig } from "@opencode-ai/sdk/v2/client"
+
 const PROVIDER_ID = /^[a-z0-9][a-z0-9-_]*$/
 const OPENAI_COMPATIBLE = "@ai-sdk/openai-compatible"
 
@@ -153,6 +155,23 @@ export function validateProviderEdit(input: { baseURL: string; apiKey: string; t
   const error = baseURLError(baseURL, input.t)
   if (error) return { err: { baseURL: error } }
   return { err: {}, result: { baseURL, key: input.apiKey.trim() || undefined } }
+}
+
+// mrtoro: custom providers in the config that the server left out of its provider list. One without
+// pinned models drops out when its server lists none, usually because the server is down, and would
+// otherwise vanish from settings along with the way to fix its URL.
+export function unreachableCustomProviders(input: {
+  providers: Record<string, ProviderConfig> | undefined
+  connected: Set<string>
+  disabled: string[]
+}) {
+  return Object.entries(input.providers ?? {}).flatMap(([id, provider]) => {
+    if (input.connected.has(id) || input.disabled.includes(id)) return []
+    if (provider.npm !== OPENAI_COMPATIBLE) return []
+    const url = provider.options?.baseURL ?? provider.api
+    if (!url) return []
+    return [{ id, name: provider.name ?? id, host: URL.canParse(url) ? new URL(url).host : url }]
+  })
 }
 
 function baseURLError(baseURL: string, t: Translator) {

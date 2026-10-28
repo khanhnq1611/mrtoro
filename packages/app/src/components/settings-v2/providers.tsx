@@ -10,6 +10,7 @@ import { useServerProtocol, useServerSDK } from "@/context/server-sdk"
 import { useServerSync } from "@/context/server-sync"
 import { DialogConnectProvider, useProviderConnectController } from "../dialog-connect-provider"
 import { DialogCustomProvider, DialogEditCustomProvider } from "../dialog-custom-provider"
+import { unreachableCustomProviders } from "../dialog-custom-provider-form"
 import { SettingsListV2 } from "./parts/list"
 import "./settings-v2.css"
 
@@ -95,6 +96,15 @@ export const SettingsProvidersV2: Component<{
     return true
   }
 
+  const unreachable = createMemo(() => {
+    if (protocol() !== "v1") return []
+    return unreachableCustomProviders({
+      providers: serverSync().data.config.provider,
+      connected: new Set(connected().map((p) => p.id)),
+      disabled: serverSync().data.config.disabled_providers ?? [],
+    })
+  })
+
   const disableProvider = async (providerID: string, name: string) => {
     if (protocol() !== "v1") return
     const before = serverSync().data.config.disabled_providers ?? []
@@ -154,7 +164,7 @@ export const SettingsProvidersV2: Component<{
           <h3 class="settings-v2-section-title">{language.t("settings.providers.section.connected")}</h3>
           <SettingsListV2>
             <Show
-              when={connected().length > 0}
+              when={connected().length > 0 || unreachable().length > 0}
               fallback={
                 <div class="settings-v2-provider-empty">{language.t("settings.providers.connected.empty")}</div>
               }
@@ -203,6 +213,43 @@ export const SettingsProvidersV2: Component<{
                         </ButtonV2>
                       </div>
                     </Show>
+                  </div>
+                )}
+              </For>
+              <For each={unreachable()}>
+                {(item) => (
+                  <div class="settings-v2-provider-row">
+                    <div class="settings-v2-provider-lead">
+                      <ProviderIcon
+                        id={item.id}
+                        width={PROVIDER_ICON_SIZE}
+                        height={PROVIDER_ICON_SIZE}
+                        class="settings-v2-provider-icon shrink-0"
+                      />
+                      <div class="settings-v2-provider-copy">
+                        <div class="settings-v2-provider-main">
+                          <span class="settings-v2-provider-name truncate">{item.name}</span>
+                          <Tag>{language.t("settings.providers.tag.custom")}</Tag>
+                        </div>
+                        <p class="settings-v2-provider-description">
+                          {language.t("app.server.unreachable", { server: item.host })}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <ButtonV2
+                        size="normal"
+                        variant="ghost-muted"
+                        onClick={() =>
+                          dialog.show(() => <DialogEditCustomProvider providerID={item.id} name={item.name} />)
+                        }
+                      >
+                        {language.t("common.edit")}
+                      </ButtonV2>
+                      <ButtonV2 size="normal" variant="ghost-muted" onClick={() => void disconnect(item.id, item.name)}>
+                        {language.t("common.disconnect")}
+                      </ButtonV2>
+                    </div>
                   </div>
                 )}
               </For>

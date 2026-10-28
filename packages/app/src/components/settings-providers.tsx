@@ -10,6 +10,7 @@ import { useServerProtocol, useServerSDK } from "@/context/server-sdk"
 import { useServerSync } from "@/context/server-sync"
 import { DialogConnectProvider, useProviderConnectController } from "./dialog-connect-provider"
 import { DialogCustomProvider, DialogEditCustomProvider } from "./dialog-custom-provider"
+import { unreachableCustomProviders } from "./dialog-custom-provider-form"
 import { SettingsList } from "./settings-list"
 import { SettingsServerPicker, SettingsServerScope } from "./settings-server-picker"
 
@@ -98,6 +99,15 @@ const SettingsProvidersContent: Component<{ onBack?: () => void }> = (props) => 
     return true
   }
 
+  const unreachable = createMemo(() => {
+    if (protocol() !== "v1") return []
+    return unreachableCustomProviders({
+      providers: serverSync().data.config.provider,
+      connected: new Set(connected().map((p) => p.id)),
+      disabled: serverSync().data.config.disabled_providers ?? [],
+    })
+  })
+
   const disableProvider = async (providerID: string, name: string) => {
     if (protocol() !== "v1") return
     const before = serverSync().data.config.disabled_providers ?? []
@@ -160,7 +170,7 @@ const SettingsProvidersContent: Component<{ onBack?: () => void }> = (props) => 
           <h3 class="text-14-medium text-text-strong pb-2">{language.t("settings.providers.section.connected")}</h3>
           <SettingsList>
             <Show
-              when={connected().length > 0}
+              when={connected().length > 0 || unreachable().length > 0}
               fallback={
                 <div class="py-4 text-14-regular text-text-weak">
                   {language.t("settings.providers.connected.empty")}
@@ -200,6 +210,36 @@ const SettingsProvidersContent: Component<{ onBack?: () => void }> = (props) => 
                         </Button>
                       </div>
                     </Show>
+                  </div>
+                )}
+              </For>
+              <For each={unreachable()}>
+                {(item) => (
+                  <div class="flex flex-wrap items-center justify-between gap-4 min-h-16 py-3 border-b border-border-weak-base last:border-none">
+                    <div class="flex flex-col min-w-0">
+                      <div class="flex items-center gap-3 min-w-0">
+                        <ProviderIcon id={item.id} class="size-5 shrink-0 icon-strong-base" />
+                        <span class="text-14-medium text-text-strong truncate">{item.name}</span>
+                        <Tag>{language.t("settings.providers.tag.custom")}</Tag>
+                      </div>
+                      <span class="text-12-regular text-text-weak pl-8">
+                        {language.t("app.server.unreachable", { server: item.host })}
+                      </span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <Button
+                        size="large"
+                        variant="ghost"
+                        onClick={() =>
+                          dialog.show(() => <DialogEditCustomProvider providerID={item.id} name={item.name} />)
+                        }
+                      >
+                        {language.t("common.edit")}
+                      </Button>
+                      <Button size="large" variant="ghost" onClick={() => void disconnect(item.id, item.name)}>
+                        {language.t("common.disconnect")}
+                      </Button>
+                    </div>
                   </div>
                 )}
               </For>

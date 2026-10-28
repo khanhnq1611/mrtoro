@@ -77,8 +77,10 @@ export function DialogEditCustomProvider(props: { providerID: string; name: stri
           },
         },
       })
-      // Only a config change reloads the providers on its own.
-      if (authKey) await serverSDK().client.global.dispose()
+      // A config change reloads the providers in the background, and a key saved with auth.set does
+      // not reload them at all, so reload them here and refetch the list once that has finished.
+      await serverSDK().client.global.dispose()
+      await serverSync().refreshProviders()
     },
     onSuccess: () => {
       dialog.close()

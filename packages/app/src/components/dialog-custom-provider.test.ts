@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { validateCustomProvider, validateProviderEdit } from "./dialog-custom-provider-form"
+import { unreachableCustomProviders, validateCustomProvider, validateProviderEdit } from "./dialog-custom-provider-form"
 
 const t = (key: string) => key
 
@@ -101,5 +101,46 @@ describe("validateProviderEdit", () => {
     expect(validateProviderEdit({ baseURL: "api.example.com", apiKey: "sk", t })).toEqual({
       err: { baseURL: "provider.custom.error.baseURL.format" },
     })
+  })
+})
+
+describe("unreachableCustomProviders", () => {
+  const compatible = (baseURL?: string) => ({ npm: "@ai-sdk/openai-compatible", options: { baseURL } })
+
+  test("lists an enabled custom provider the server left out, with its host", () => {
+    expect(
+      unreachableCustomProviders({
+        providers: {
+          etprovider: { ...compatible("https://down.example.com/v1"), name: "ET" },
+          local: compatible("http://127.0.0.1:8000/v1"),
+        },
+        connected: new Set(["local"]),
+        disabled: [],
+      }),
+    ).toEqual([{ id: "etprovider", name: "ET", host: "down.example.com" }])
+  })
+
+  test("skips disabled providers, built-in overrides and providers without a URL", () => {
+    expect(
+      unreachableCustomProviders({
+        providers: {
+          off: compatible("https://off.example.com/v1"),
+          anthropic: { options: { apiKey: "key" } },
+          nourl: compatible(),
+        },
+        connected: new Set(),
+        disabled: ["off"],
+      }),
+    ).toEqual([])
+  })
+
+  test("falls back to the api field for the URL", () => {
+    expect(
+      unreachableCustomProviders({
+        providers: { legacy: { npm: "@ai-sdk/openai-compatible", api: "https://legacy.example.com/v1" } },
+        connected: new Set(),
+        disabled: [],
+      }),
+    ).toEqual([{ id: "legacy", name: "legacy", host: "legacy.example.com" }])
   })
 })
