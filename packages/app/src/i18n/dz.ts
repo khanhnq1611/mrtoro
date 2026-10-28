@@ -266,6 +266,7 @@ export const dict: Record<string, string> = {
   "provider.custom.field.apiKey.placeholder": "APIལྡེ་མིག།",
   "provider.custom.field.apiKey.description":
     "གདམ་ཁ་ཅན། ཁྱོད་ཀྱིས་མགོ་ཡིག་ཚུ་བརྒྱུད་དེ་ བདེན་བཤད་འཛིན་སྐྱོང་འཐབ་པ་ཅིན་ སྟོངམ་བཞག།",
+  "provider.custom.field.apiKey.keep": "ད་ལྟོའི་APIལྡེ་མིག་བཞག་ནིའི་དོན་ལུ་ སྟོངམ་སྦེ་བཞག།",
   "provider.custom.models.label": "དཔེ་ཚད།",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "དཔེ་ཚད་-ཨའི་ཌི།",

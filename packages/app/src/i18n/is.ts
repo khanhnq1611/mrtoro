@@ -266,6 +266,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API lykill",
   "provider.custom.field.apiKey.description":
     "Valfrjálst. Skildu eftir autt ef þú stjórnar auðkenningu í gegnum hausa.",
+  "provider.custom.field.apiKey.keep": "Skildu eftir autt til að halda núverandi API lykli.",
   "provider.custom.models.label": "Fyrirmyndir",
   "provider.custom.models.id.label": "auðkenni",
   "provider.custom.models.id.placeholder": "módel-id",

@@ -263,6 +263,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "API-nyckel",
   "provider.custom.field.apiKey.placeholder": "API-nyckel",
   "provider.custom.field.apiKey.description": "Valfritt. Lämna tomt om du hanterar autentisering via HTTP-huvuden.",
+  "provider.custom.field.apiKey.keep": "Lämna tomt för att behålla den nuvarande API-nyckeln.",
   "provider.custom.models.label": "Modeller",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "modell-id",

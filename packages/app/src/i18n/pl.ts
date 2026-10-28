@@ -270,6 +270,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "Klucz API",
   "provider.custom.field.apiKey.description":
     "Opcjonalne. Pozostaw puste, jeśli zarządzasz autoryzacją przez nagłówki.",
+  "provider.custom.field.apiKey.keep": "Pozostaw puste, aby zachować obecny klucz API.",
   "provider.custom.models.label": "Modele",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

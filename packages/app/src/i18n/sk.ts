@@ -261,6 +261,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "API kľúč",
   "provider.custom.field.apiKey.placeholder": "API kľúč",
   "provider.custom.field.apiKey.description": "Voliteľné. Nechajte prázdne, ak autentifikáciu riešite cez hlavičky.",
+  "provider.custom.field.apiKey.keep": "Nechajte prázdne, ak chcete zachovať aktuálny API kľúč.",
   "provider.custom.models.label": "Modely",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

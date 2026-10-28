@@ -264,6 +264,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "tecla API.",
   "provider.custom.field.apiKey.description":
     "Opcional. Deixeu-lo en blanc si gestioneu l'autenticació mitjançant les capçaleres.",
+  "provider.custom.field.apiKey.keep": "Deixa-ho buit per conservar la clau API actual.",
   "provider.custom.models.label": "Models",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

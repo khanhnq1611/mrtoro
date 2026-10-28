@@ -262,6 +262,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "API кључ",
   "provider.custom.field.apiKey.placeholder": "API кључ",
   "provider.custom.field.apiKey.description": "Опционо. Оставите празно ако аутом управљате преко заглавља.",
+  "provider.custom.field.apiKey.keep": "Оставите празно да бисте задржали тренутни API кључ.",
   "provider.custom.models.label": "Модели",
   "provider.custom.models.id.label": "ИД",
   "provider.custom.models.id.placeholder": "модел-ид",

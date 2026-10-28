@@ -262,6 +262,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "API açary",
   "provider.custom.field.apiKey.placeholder": "API açary",
   "provider.custom.field.apiKey.description": "Meýletin. Awtory sözbaşylar arkaly dolandyrsaňyz, boş goýuň.",
+  "provider.custom.field.apiKey.keep": "Häzirki API açaryny saklamak üçin boş goýuň.",
   "provider.custom.models.label": "Modeller",
   "provider.custom.models.id.label": "Şahsyýetnamasy",
   "provider.custom.models.id.placeholder": "model-id",

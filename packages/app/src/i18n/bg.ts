@@ -265,6 +265,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API ключ",
   "provider.custom.field.apiKey.description":
     "Не е задължително. Оставете празно, ако управлявате удостоверяването чрез заглавки.",
+  "provider.custom.field.apiKey.keep": "Оставете празно, за да запазите текущия API ключ.",
   "provider.custom.models.label": "Модели",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "модел-id",

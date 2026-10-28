@@ -284,6 +284,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "Clave API",
   "provider.custom.field.apiKey.description":
     "Opcional. Déjalo vacío si gestionas la autenticación mediante encabezados.",
+  "provider.custom.field.apiKey.keep": "Déjalo vacío para conservar la clave API actual.",
   "provider.custom.models.label": "Modelos",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "id-modelo",

@@ -263,6 +263,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "клуч API",
   "provider.custom.field.apiKey.description":
     "Факултативно. Оставете празно ако управувате со авторизација преку заглавија.",
+  "provider.custom.field.apiKey.keep": "Оставете празно за да го задржите тековниот клуч API.",
   "provider.custom.models.label": "Модели",
   "provider.custom.models.id.label": "ИД",
   "provider.custom.models.id.placeholder": "модел-ид",

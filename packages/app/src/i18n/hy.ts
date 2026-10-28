@@ -264,6 +264,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API բանալի",
   "provider.custom.field.apiKey.description":
     "Ըստ ցանկության։ Դատարկ թողեք, եթե դուք կառավարում եք հեղինակությունը վերնագրերի միջոցով:",
+  "provider.custom.field.apiKey.keep": "Թողեք դատարկ՝ ընթացիկ API բանալին պահպանելու համար։",
   "provider.custom.models.label": "Մոդելներ",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

@@ -262,6 +262,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API klíč",
   "provider.custom.field.apiKey.description":
     "Volitelné. Pokud autorizaci spravujete pomocí záhlaví, ponechte prázdné.",
+  "provider.custom.field.apiKey.keep": "Ponechte prázdné, chcete-li zachovat současný API klíč.",
   "provider.custom.models.label": "Modely",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

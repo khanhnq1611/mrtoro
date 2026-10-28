@@ -270,6 +270,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API کلید",
   "provider.custom.field.apiKey.description":
     "اختیاری۔ اگر آپ ہیڈرز کے ذریعے توثیق کا انتظام کرتے ہیں تو اسے خالی چھوڑ دیں۔",
+  "provider.custom.field.apiKey.keep": "موجودہ API کلید برقرار رکھنے کے لیے خالی چھوڑ دیں۔",
   "provider.custom.models.label": "ماڈلز",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

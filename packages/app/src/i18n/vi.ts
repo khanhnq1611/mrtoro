@@ -269,6 +269,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "Khóa API",
   "provider.custom.field.apiKey.placeholder": "khóa API",
   "provider.custom.field.apiKey.description": "Không bắt buộc. Để trống nếu bạn quản lý xác thực thông qua tiêu đề.",
+  "provider.custom.field.apiKey.keep": "Để trống để giữ khóa API hiện tại.",
   "provider.custom.models.label": "Mô hình",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

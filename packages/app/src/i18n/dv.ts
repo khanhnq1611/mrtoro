@@ -266,6 +266,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API ކީ އެވެ",
   "provider.custom.field.apiKey.description":
     "އިޚްތިޔާރީ. ހެޑަރސް މެދުވެރިކޮށް އޮތު މެނޭޖް ކުރާނަމަ ހުސްކޮށް ދޫކޮށްލާށެވެ.",
+  "provider.custom.field.apiKey.keep": "މިހާރުގެ API ކީ ބަހައްޓަން ހުސްކޮށް ދޫކޮށްލާ.",
   "provider.custom.models.label": "މޮޑެލްތަކެވެ",
   "provider.custom.models.id.label": "ID އެވެ",
   "provider.custom.models.id.placeholder": "model-id އެވެ",

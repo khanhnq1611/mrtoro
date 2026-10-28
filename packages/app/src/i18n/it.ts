@@ -170,6 +170,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "Chiave API",
   "provider.custom.field.apiKey.description":
     "Opzionale. Lascia vuoto se gestisci l'autenticazione tramite intestazioni.",
+  "provider.custom.field.apiKey.keep": "Lascia vuoto per mantenere la chiave API attuale.",
   "provider.custom.models.label": "Modelli",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

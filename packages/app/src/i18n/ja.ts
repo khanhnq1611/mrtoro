@@ -267,6 +267,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "APIキー",
   "provider.custom.field.apiKey.placeholder": "APIキー",
   "provider.custom.field.apiKey.description": "オプション。ヘッダーで認証を管理する場合は空のままにしてください。",
+  "provider.custom.field.apiKey.keep": "空のままにすると現在の API キーが維持されます。",
   "provider.custom.models.label": "モデル",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

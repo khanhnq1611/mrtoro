@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { validateCustomProvider } from "./dialog-custom-provider-form"
+import { validateCustomProvider, validateProviderEdit } from "./dialog-custom-provider-form"
 
 const t = (key: string) => key
 
@@ -75,6 +75,31 @@ describe("validateCustomProvider", () => {
     expect(result.headers[1]).toEqual({
       key: "provider.custom.error.duplicate",
       value: undefined,
+    })
+  })
+})
+
+describe("validateProviderEdit", () => {
+  test("trims the address and key", () => {
+    expect(validateProviderEdit({ baseURL: " https://api.example.com/v1 ", apiKey: " sk-new ", t })).toEqual({
+      err: {},
+      result: { baseURL: "https://api.example.com/v1", key: "sk-new" },
+    })
+  })
+
+  test("keeps the stored key when the key is left empty", () => {
+    expect(validateProviderEdit({ baseURL: "http://127.0.0.1:8000/v1", apiKey: "  ", t }).result).toEqual({
+      baseURL: "http://127.0.0.1:8000/v1",
+      key: undefined,
+    })
+  })
+
+  test("rejects a missing or non-http address", () => {
+    expect(validateProviderEdit({ baseURL: " ", apiKey: "sk", t })).toEqual({
+      err: { baseURL: "provider.custom.error.baseURL.required" },
+    })
+    expect(validateProviderEdit({ baseURL: "api.example.com", apiKey: "sk", t })).toEqual({
+      err: { baseURL: "provider.custom.error.baseURL.format" },
     })
   })
 })

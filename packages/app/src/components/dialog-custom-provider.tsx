@@ -12,7 +12,13 @@ import { ExternalLink } from "@/components/external-link"
 import { useServerSDK } from "@/context/server-sdk"
 import { useServerSync } from "@/context/server-sync"
 import { useLanguage } from "@/context/language"
-import { type FormState, headerRow, modelRow, validateCustomProvider } from "./dialog-custom-provider-form"
+import {
+  type FormState,
+  headerRow,
+  modelRow,
+  validateCustomProvider,
+  validateProviderEdit,
+} from "./dialog-custom-provider-form"
 
 type Props = {
   onBack: () => void
@@ -36,6 +42,103 @@ export function DialogCustomProvider(props: Props) {
       transition
     >
       <CustomProviderForm />
+    </Dialog>
+  )
+}
+
+// mrtoro: changes the address and key of a custom provider. Its models follow the server's
+// /models unless the config pins them, so they need no editing here.
+export function DialogEditCustomProvider(props: { providerID: string; name: string }) {
+  const dialog = useDialog()
+  const serverSync = useServerSync()
+  const serverSDK = useServerSDK()
+  const language = useLanguage()
+  const current = () => serverSync().data.config.provider?.[props.providerID]
+
+  const [form, setForm] = createStore({
+    baseURL: current()?.options?.baseURL ?? current()?.api ?? "",
+    apiKey: current()?.options?.apiKey ?? "",
+    err: {} as { baseURL?: string },
+  })
+
+  const saveMutation = useMutation(() => ({
+    mutationFn: async (result: { baseURL: string; key?: string }) => {
+      // A key in the config file outranks one saved with auth.set, so the new key goes where the
+      // old one was.
+      const keyInConfig = current()?.options?.apiKey !== undefined
+      const authKey = result.key && !keyInConfig ? result.key : undefined
+      if (authKey) {
+        await serverSDK().client.auth.set({ providerID: props.providerID, auth: { type: "api", key: authKey } })
+      }
+      await serverSync().updateConfig({
+        provider: {
+          [props.providerID]: {
+            options: { baseURL: result.baseURL, ...(result.key && keyInConfig ? { apiKey: result.key } : {}) },
+          },
+        },
+      })
+      // Only a config change reloads the providers on its own.
+      if (authKey) await serverSDK().client.global.dispose()
+    },
+    onSuccess: () => {
+      dialog.close()
+      showToast({
+        variant: "success",
+        icon: "circle-check",
+        title: language.t("provider.connect.toast.connected.title", { provider: props.name }),
+        description: language.t("provider.connect.toast.connected.description", { provider: props.name }),
+      })
+    },
+    onError: (err) => {
+      const message = err instanceof Error ? err.message : String(err)
+      showToast({ title: language.t("common.requestFailed"), description: message })
+    },
+  }))
+
+  const save = (e: SubmitEvent) => {
+    e.preventDefault()
+    if (saveMutation.isPending) return
+    const output = validateProviderEdit({ baseURL: form.baseURL, apiKey: form.apiKey, t: language.t })
+    setForm("err", output.err)
+    if (output.result) saveMutation.mutate(output.result)
+  }
+
+  return (
+    <Dialog title={props.name} transition>
+      <form onSubmit={save} class="px-5 pb-6 flex flex-col gap-6">
+        <div class="flex flex-col gap-4">
+          <TextField
+            autofocus
+            label={language.t("provider.custom.field.baseURL.label")}
+            placeholder={language.t("provider.custom.field.baseURL.placeholder")}
+            value={form.baseURL}
+            onChange={(v) => {
+              setForm("baseURL", v)
+              setForm("err", "baseURL", undefined)
+            }}
+            validationState={form.err.baseURL ? "invalid" : undefined}
+            error={form.err.baseURL}
+          />
+          <TextField
+            type="password"
+            autocomplete="off"
+            label={language.t("provider.custom.field.apiKey.label")}
+            placeholder={language.t("provider.custom.field.apiKey.placeholder")}
+            description={language.t("provider.custom.field.apiKey.keep")}
+            value={form.apiKey}
+            onChange={(v) => setForm("apiKey", v)}
+          />
+        </div>
+        <Button
+          class="w-auto self-start"
+          type="submit"
+          size="large"
+          variant="primary"
+          disabled={saveMutation.isPending}
+        >
+          {saveMutation.isPending ? language.t("common.saving") : language.t("common.save")}
+        </Button>
+      </form>
     </Dialog>
   )
 }

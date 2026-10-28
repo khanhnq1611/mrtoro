@@ -262,6 +262,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API atslēga",
   "provider.custom.field.apiKey.description":
     "Nav obligāti. Atstājiet tukšu, ja autentifikāciju pārvaldāt ar galvenēm.",
+  "provider.custom.field.apiKey.keep": "Atstājiet tukšu, lai saglabātu pašreizējo API atslēgu.",
   "provider.custom.models.label": "Modeļi",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

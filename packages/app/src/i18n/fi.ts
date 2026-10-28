@@ -169,6 +169,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "API-avain",
   "provider.custom.field.apiKey.placeholder": "API-avain",
   "provider.custom.field.apiKey.description": "Valinnainen. Jätä tyhjäksi, jos hallitset todennusta otsikoiden avulla.",
+  "provider.custom.field.apiKey.keep": "Jätä tyhjäksi, niin nykyinen API-avain säilyy.",
   "provider.custom.models.label": "Mallit",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

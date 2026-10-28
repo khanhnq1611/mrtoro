@@ -261,6 +261,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "សោ API",
   "provider.custom.field.apiKey.placeholder": "សោ API",
   "provider.custom.field.apiKey.description": "ស្រេចចិត្ត។ ទុកឱ្យទទេប្រសិនបើអ្នកគ្រប់គ្រងការផ្ទៀងផ្ទាត់តាមរយៈបឋមកថា។",
+  "provider.custom.field.apiKey.keep": "ទុកឱ្យនៅទទេ ដើម្បីរក្សាសោ API បច្ចុប្បន្ន។",
   "provider.custom.models.label": "ម៉ូដែល",
   "provider.custom.models.id.label": "លេខសម្គាល់",
   "provider.custom.models.id.placeholder": "model-id",

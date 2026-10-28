@@ -9,7 +9,7 @@ import { useLanguage } from "@/context/language"
 import { useServerProtocol, useServerSDK } from "@/context/server-sdk"
 import { useServerSync } from "@/context/server-sync"
 import { DialogConnectProvider, useProviderConnectController } from "./dialog-connect-provider"
-import { DialogCustomProvider } from "./dialog-custom-provider"
+import { DialogCustomProvider, DialogEditCustomProvider } from "./dialog-custom-provider"
 import { SettingsList } from "./settings-list"
 import { SettingsServerPicker, SettingsServerScope } from "./settings-server-picker"
 
@@ -93,7 +93,8 @@ const SettingsProvidersContent: Component<{ onBack?: () => void }> = (props) => 
     const provider = serverSync().data.config.provider?.[providerID]
     if (!provider) return false
     if (provider.npm !== "@ai-sdk/openai-compatible") return false
-    if (!provider.models || Object.keys(provider.models).length === 0) return false
+    // mrtoro: a custom provider may list no models and take them from its server's /models.
+    if (Object.keys(provider.models ?? {}).length === 0 && !provider.options?.baseURL && !provider.api) return false
     return true
   }
 
@@ -182,9 +183,22 @@ const SettingsProvidersContent: Component<{ onBack?: () => void }> = (props) => 
                         </span>
                       }
                     >
-                      <Button size="large" variant="ghost" onClick={() => void disconnect(item.id, item.name)}>
-                        {language.t("common.disconnect")}
-                      </Button>
+                      <div class="flex items-center gap-1">
+                        <Show when={protocol() === "v1" && isConfigCustom(item.id)}>
+                          <Button
+                            size="large"
+                            variant="ghost"
+                            onClick={() =>
+                              dialog.show(() => <DialogEditCustomProvider providerID={item.id} name={item.name} />)
+                            }
+                          >
+                            {language.t("common.edit")}
+                          </Button>
+                        </Show>
+                        <Button size="large" variant="ghost" onClick={() => void disconnect(item.id, item.name)}>
+                          {language.t("common.disconnect")}
+                        </Button>
+                      </div>
                     </Show>
                   </div>
                 )}

@@ -263,6 +263,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API калид",
   "provider.custom.field.apiKey.description":
     "Ихтиёрӣ. Агар шумо аутентификатсияро тавассути сарлавҳаҳо идора кунед, холӣ гузоред.",
+  "provider.custom.field.apiKey.keep": "Барои нигоҳ доштани API калиди ҷорӣ холӣ гузоред.",
   "provider.custom.models.label": "Моделҳо",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "модели ID",

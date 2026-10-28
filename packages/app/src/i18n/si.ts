@@ -261,6 +261,7 @@ export const dict: Record<string, string> = {
   "provider.custom.field.apiKey.label": "API යතුර",
   "provider.custom.field.apiKey.placeholder": "API යතුර",
   "provider.custom.field.apiKey.description": "විකල්ප. ඔබ ශීර්ෂ හරහා සත්‍යාපනය කළමනාකරණය කරන්නේ නම් හිස්ව තබන්න.",
+  "provider.custom.field.apiKey.keep": "වත්මන් API යතුර තබා ගැනීමට හිස්ව තබන්න.",
   "provider.custom.models.label": "ආකෘති",
   "provider.custom.models.id.label": "හැඳුනුම්පත",
   "provider.custom.models.id.placeholder": "ආදර්ශ-id",

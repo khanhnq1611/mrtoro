@@ -164,6 +164,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "API 키",
   "provider.custom.field.apiKey.placeholder": "API 키",
   "provider.custom.field.apiKey.description": "선택 사항입니다. 헤더를 통해 인증을 관리하는 경우 비워 두세요.",
+  "provider.custom.field.apiKey.keep": "비워 두면 현재 API 키가 유지됩니다.",
   "provider.custom.models.label": "모델",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

@@ -262,6 +262,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "Tasti API",
   "provider.custom.field.apiKey.placeholder": "Tasti API",
   "provider.custom.field.apiKey.description": "Fakultative. Lëreni bosh nëse menaxhoni auth nëpërmjet titujve.",
+  "provider.custom.field.apiKey.keep": "Lëreni bosh për të mbajtur çelësin aktual API.",
   "provider.custom.models.label": "Modelet",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

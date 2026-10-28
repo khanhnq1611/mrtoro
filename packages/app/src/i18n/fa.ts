@@ -262,6 +262,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "کلید API",
   "provider.custom.field.apiKey.placeholder": "کلید API",
   "provider.custom.field.apiKey.description": "اختیاری. اگر تأیید اعتبار را از طریق هدر مدیریت می کنید، خالی بگذارید.",
+  "provider.custom.field.apiKey.keep": "برای نگه‌داشتن کلید API فعلی، خالی بگذارید.",
   "provider.custom.models.label": "مدل ها",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

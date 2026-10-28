@@ -263,6 +263,7 @@ export const dict: Record<string, string> = {
   "provider.custom.field.apiKey.placeholder": "API कुञ्जी",
   "provider.custom.field.apiKey.description":
     "ऐच्छिक। यदि तपाइँ हेडरहरू मार्फत प्रमाणीकरण व्यवस्थापन गर्नुहुन्छ भने खाली छोड्नुहोस्।",
+  "provider.custom.field.apiKey.keep": "हालको API कुञ्जी राख्न खाली छोड्नुहोस्।",
   "provider.custom.models.label": "मोडेलहरू",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "मोडेल-आईडी",

@@ -261,6 +261,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "API lykil",
   "provider.custom.field.apiKey.placeholder": "API lykil",
   "provider.custom.field.apiKey.description": "Valfrítt. Lat vera tómt um tú umsitur auth umvegis yvirskriftir.",
+  "provider.custom.field.apiKey.keep": "Lat standa tómt fyri at varðveita núverandi API lykilin.",
   "provider.custom.models.label": "Fyrimyndir",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

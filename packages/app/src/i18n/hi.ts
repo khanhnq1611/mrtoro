@@ -269,6 +269,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API कुंजी",
   "provider.custom.field.apiKey.description":
     "वैकल्पिक। यदि आप हेडर के माध्यम से प्रमाणीकरण प्रबंधित करते हैं तो खाली छोड़ दें।",
+  "provider.custom.field.apiKey.keep": "मौजूदा API कुंजी रखने के लिए खाली छोड़ें।",
   "provider.custom.models.label": "मॉडल",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

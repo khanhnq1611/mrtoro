@@ -303,6 +303,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "API 密钥",
   "provider.custom.field.apiKey.placeholder": "API 密钥",
   "provider.custom.field.apiKey.description": "可选。如果你通过请求头管理认证，可留空。",
+  "provider.custom.field.apiKey.keep": "留空则保留当前 API 密钥。",
   "provider.custom.models.label": "模型",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

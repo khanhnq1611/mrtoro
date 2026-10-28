@@ -261,6 +261,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "API klahv",
   "provider.custom.field.apiKey.placeholder": "API klahv",
   "provider.custom.field.apiKey.description": "Valikuline. Jätke tühjaks, kui haldate autentimist päiste kaudu.",
+  "provider.custom.field.apiKey.keep": "Jätke tühjaks, et praegune API-võti alles jääks.",
   "provider.custom.models.label": "Mudelid",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

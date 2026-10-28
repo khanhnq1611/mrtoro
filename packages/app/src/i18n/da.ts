@@ -182,6 +182,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "API-nøgle",
   "provider.custom.field.apiKey.placeholder": "API-nøgle",
   "provider.custom.field.apiKey.description": "Valgfri. Lad være tom, hvis du administrerer godkendelse via headers.",
+  "provider.custom.field.apiKey.keep": "Lad feltet stå tomt for at beholde den nuværende API-nøgle.",
   "provider.custom.models.label": "Modeller",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

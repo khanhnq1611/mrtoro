@@ -288,6 +288,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API anahtarı",
   "provider.custom.field.apiKey.description":
     "İsteğe bağlı. Kimlik doğrulamayı başlıklarla yönetiyorsanız boş bırakın.",
+  "provider.custom.field.apiKey.keep": "Mevcut API anahtarını korumak için boş bırakın.",
   "provider.custom.models.label": "Modeller",
   "provider.custom.models.id.label": "Kimlik",
   "provider.custom.models.id.placeholder": "model-kimlik",

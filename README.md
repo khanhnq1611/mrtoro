@@ -169,6 +169,10 @@ so swapping the model on the server only takes a reload of the web app or a rest
 pin a fixed list instead, add `"models": { "my-model": { "name": "My model" } }`, and `"model":
 "etprovider/my-model"` to make one the default.
 
+To change a custom provider's URL or API key from the web app, open Settings → Providers and press
+**Edit** next to it. The new key replaces the old one where it was stored (the config file or
+`auth.json`), and leaving the key empty keeps it.
+
 Other providers (Anthropic, OpenAI, etc.) use the standard `apiKey` option. See `mrtoro-docs` skill for the full config reference.
 
 `mrtoro-docs` is compiled into the binary, so there is nothing to configure for it: on first use

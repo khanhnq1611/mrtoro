@@ -272,6 +272,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "Clé API",
   "provider.custom.field.apiKey.description":
     "Facultatif. Laissez ce champ vide si vous gérez l'authentification au moyen des en-têtes.",
+  "provider.custom.field.apiKey.keep": "Laissez vide pour conserver la clé API actuelle.",
   "provider.custom.models.label": "Modèles",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "id-modele",

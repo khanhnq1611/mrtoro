@@ -261,6 +261,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "Cheie API",
   "provider.custom.field.apiKey.placeholder": "Cheie API",
   "provider.custom.field.apiKey.description": "Opțional. Lasă gol dacă gestionezi autentificarea prin headere.",
+  "provider.custom.field.apiKey.keep": "Lăsați gol pentru a păstra cheia API curentă.",
   "provider.custom.models.label": "Modele",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

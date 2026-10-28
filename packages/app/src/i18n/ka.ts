@@ -262,6 +262,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API გასაღები",
   "provider.custom.field.apiKey.description":
     "სურვილისამებრ. დატოვეთ ცარიელი, თუ თქვენ მართავთ ავტორიზაციას სათაურების მეშვეობით.",
+  "provider.custom.field.apiKey.keep": "დატოვეთ ცარიელი მიმდინარე API გასაღების შესანარჩუნებლად.",
   "provider.custom.models.label": "მოდელები",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

@@ -283,6 +283,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "Ключ API",
   "provider.custom.field.apiKey.description":
     "Необязательно. Оставьте пустым, если управляете авторизацией через заголовки.",
+  "provider.custom.field.apiKey.keep": "Оставьте пустым, чтобы сохранить текущий ключ API.",
   "provider.custom.models.label": "Модели",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

@@ -264,6 +264,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API kaliti",
   "provider.custom.field.apiKey.description":
     "Ixtiyoriy. Agar autentifikatsiyani sarlavhalar orqali boshqarsangiz, boʻsh qoldiring.",
+  "provider.custom.field.apiKey.keep": "Joriy API kalitini saqlab qolish uchun boʻsh qoldiring.",
   "provider.custom.models.label": "Modellar",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model identifikatori",

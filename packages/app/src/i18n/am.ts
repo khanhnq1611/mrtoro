@@ -258,6 +258,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "API ቁልፍ",
   "provider.custom.field.apiKey.placeholder": "API ቁልፍ",
   "provider.custom.field.apiKey.description": "አማራጭ. በራስጌዎች በኩል ማተምን የሚያስተዳድሩ ከሆነ ባዶ ይተዉት።",
+  "provider.custom.field.apiKey.keep": "የአሁኑን API ቁልፍ ለማቆየት ባዶ ይተዉት።",
   "provider.custom.models.label": "ሞዴሎች",
   "provider.custom.models.id.label": "መታወቂያ",
   "provider.custom.models.id.placeholder": "model-id",

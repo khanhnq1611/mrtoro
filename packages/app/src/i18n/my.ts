@@ -264,6 +264,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API သော့",
   "provider.custom.field.apiKey.description":
     "ရွေးချယ်နိုင်သည် ခေါင်းစီးများမှတစ်ဆင့် စစ်မှန်ကြောင်း စီမံခန့်ခွဲပါက ဗလာချန်ထားပါ။",
+  "provider.custom.field.apiKey.keep": "လက်ရှိ API သော့ကို ဆက်ထားရန် ဗလာထားပါ။",
   "provider.custom.models.label": "မော်ဒယ်များ",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

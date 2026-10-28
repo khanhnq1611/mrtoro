@@ -282,6 +282,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API-nøkkel",
   "provider.custom.field.apiKey.description":
     "Valgfritt. La stå tomt hvis du administrerer autentisering via HTTP-hoder.",
+  "provider.custom.field.apiKey.keep": "La feltet stå tomt for å beholde den nåværende API-nøkkelen.",
   "provider.custom.models.label": "Modeller",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "modell-id",

@@ -267,6 +267,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "API کلید",
   "provider.custom.field.apiKey.placeholder": "API کلید",
   "provider.custom.field.apiKey.description": "اختیاری۔ جے تسی ہیڈرز دے ذریعے تصدیق دا انتظام کردے او تے خالی چھڈ دیو۔",
+  "provider.custom.field.apiKey.keep": "ਮੌਜੂਦਾ API ਕੁੰਜੀ ਰੱਖਣ ਲਈ ਖਾਲੀ ਛੱਡੋ।",
   "provider.custom.models.label": "ماڈل",
   "provider.custom.models.id.label": "آئی ڈی",
   "provider.custom.models.id.placeholder": "ماڈل آئی ڈی",

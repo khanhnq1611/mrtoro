@@ -261,6 +261,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "ລະຫັດ API",
   "provider.custom.field.apiKey.placeholder": "ລະຫັດ API",
   "provider.custom.field.apiKey.description": "ທາງເລືອກ. ປ່ອຍຫວ່າງໄວ້ຖ້າທ່ານຈັດການການກວດສອບຜ່ານສ່ວນຫົວ.",
+  "provider.custom.field.apiKey.keep": "ປ່ອຍຫວ່າງໄວ້ເພື່ອໃຊ້ລະຫັດ API ປັດຈຸບັນຕໍ່.",
   "provider.custom.models.label": "ແບບ",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

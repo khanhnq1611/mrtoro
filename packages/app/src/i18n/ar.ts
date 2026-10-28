@@ -268,6 +268,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "مفتاح API",
   "provider.custom.field.apiKey.placeholder": "مفتاح API",
   "provider.custom.field.apiKey.description": "اختياري. اتركه فارغًا إذا كنت تدير المصادقة عبر الترويسات.",
+  "provider.custom.field.apiKey.keep": "اتركه فارغًا للإبقاء على مفتاح API الحالي.",
   "provider.custom.models.label": "النماذج",
   "provider.custom.models.id.label": "المعرف",
   "provider.custom.models.id.placeholder": "model-id",

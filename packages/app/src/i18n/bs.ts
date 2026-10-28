@@ -284,6 +284,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API ključ",
   "provider.custom.field.apiKey.description":
     "Opcionalno. Ostavi prazno ako upravljaš autentifikacijom putem zaglavlja.",
+  "provider.custom.field.apiKey.keep": "Ostavite prazno da zadržite trenutni API ključ.",
   "provider.custom.models.label": "Modeli",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

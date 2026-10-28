@@ -262,6 +262,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "API-sleutel",
   "provider.custom.field.apiKey.placeholder": "API-sleutel",
   "provider.custom.field.apiKey.description": "Optioneel. Laat leeg als je de authenticatie via headers beheert.",
+  "provider.custom.field.apiKey.keep": "Laat leeg om de huidige API-sleutel te behouden.",
   "provider.custom.models.label": "Modellen",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

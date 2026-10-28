@@ -262,6 +262,7 @@ export const dict: Record<string, string> = {
   "provider.custom.field.apiKey.label": "API কী",
   "provider.custom.field.apiKey.placeholder": "API কী",
   "provider.custom.field.apiKey.description": "ঐচ্ছিক। আপনি শিরোনামের মাধ্যমে প্রমাণীকরণ পরিচালনা করলে খালি ছেড়ে দিন।",
+  "provider.custom.field.apiKey.keep": "বর্তমান API কী রাখতে খালি রাখুন।",
   "provider.custom.models.label": "মডেল",
   "provider.custom.models.id.label": "আইডি",
   "provider.custom.models.id.placeholder": "মডেল-আইডি",

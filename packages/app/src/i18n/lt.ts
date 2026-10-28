@@ -266,6 +266,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API raktas",
   "provider.custom.field.apiKey.description":
     "Neprivaloma. Palikite tuščią, jei autentifikavimą valdote per antraštes.",
+  "provider.custom.field.apiKey.keep": "Palikite tuščią, kad išliktų dabartinis API raktas.",
   "provider.custom.models.label": "Modeliai",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "modelio ID",

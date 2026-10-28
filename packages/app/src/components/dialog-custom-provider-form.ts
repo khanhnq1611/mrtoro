@@ -64,11 +64,7 @@ export function validateCustomProvider(input: ValidateArgs) {
       : undefined
 
   const nameError = !name ? input.t("provider.custom.error.name.required") : undefined
-  const urlError = !baseURL
-    ? input.t("provider.custom.error.baseURL.required")
-    : !/^https?:\/\//.test(baseURL)
-      ? input.t("provider.custom.error.baseURL.format")
-      : undefined
+  const urlError = baseURLError(baseURL, input.t)
 
   const disabled = input.disabledProviders.includes(providerID)
   const existsError = idError
@@ -148,6 +144,20 @@ export function validateCustomProvider(input: ValidateArgs) {
       },
     },
   }
+}
+
+// mrtoro: checks the address and key typed when editing a custom provider. An empty key keeps
+// the one already stored.
+export function validateProviderEdit(input: { baseURL: string; apiKey: string; t: Translator }) {
+  const baseURL = input.baseURL.trim()
+  const error = baseURLError(baseURL, input.t)
+  if (error) return { err: { baseURL: error } }
+  return { err: {}, result: { baseURL, key: input.apiKey.trim() || undefined } }
+}
+
+function baseURLError(baseURL: string, t: Translator) {
+  if (!baseURL) return t("provider.custom.error.baseURL.required")
+  if (!/^https?:\/\//.test(baseURL)) return t("provider.custom.error.baseURL.format")
 }
 
 let row = 0

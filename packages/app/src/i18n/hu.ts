@@ -266,6 +266,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API kulcs",
   "provider.custom.field.apiKey.description":
     "Választható. Hagyja üresen, ha a hitelesítést fejléceken keresztül kezeli.",
+  "provider.custom.field.apiKey.keep": "Hagyja üresen a jelenlegi API kulcs megtartásához.",
   "provider.custom.models.label": "Modellek",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "modell-azonosító",

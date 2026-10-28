@@ -265,6 +265,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API açarı",
   "provider.custom.field.apiKey.description":
     "İstəyə bağlıdır. Autentifikasiyanı başlıqlar vasitəsilə idarə edirsinizsə, boş buraxın.",
+  "provider.custom.field.apiKey.keep": "Cari API açarını saxlamaq üçün boş buraxın.",
   "provider.custom.models.label": "Modellər",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

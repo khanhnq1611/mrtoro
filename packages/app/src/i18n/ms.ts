@@ -262,6 +262,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "Kunci API",
   "provider.custom.field.apiKey.description":
     "Pilihan. Biarkan kosong jika anda mengurus pengesahan melalui pengepala.",
+  "provider.custom.field.apiKey.keep": "Biarkan kosong untuk mengekalkan kunci API semasa.",
   "provider.custom.models.label": "Model",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "id-model",

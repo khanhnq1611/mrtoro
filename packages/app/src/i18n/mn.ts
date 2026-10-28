@@ -265,6 +265,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API түлхүүр",
   "provider.custom.field.apiKey.description":
     "Нэмэлт. Хэрэв та гарчиг ашиглан баталгаажуулалтыг удирдаж байгаа бол хоосон орхино уу.",
+  "provider.custom.field.apiKey.keep": "Одоогийн API түлхүүрийг хадгалахын тулд хоосон үлдээнэ үү.",
   "provider.custom.models.label": "Загварууд",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "загвар ID",

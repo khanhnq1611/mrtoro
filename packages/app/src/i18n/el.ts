@@ -263,6 +263,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API κλειδί",
   "provider.custom.field.apiKey.description":
     "Προαιρετικό. Αφήστε κενό εάν διαχειρίζεστε την ταυτότητα μέσω κεφαλίδων.",
+  "provider.custom.field.apiKey.keep": "Αφήστε το κενό για να διατηρηθεί το τρέχον κλειδί API.",
   "provider.custom.models.label": "Μοντέλα",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

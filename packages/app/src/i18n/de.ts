@@ -174,6 +174,7 @@ export const dict = {
   "provider.custom.field.apiKey.placeholder": "API-Schlüssel",
   "provider.custom.field.apiKey.description":
     "Optional. Leer lassen, wenn Sie die Authentifizierung über Header verwalten.",
+  "provider.custom.field.apiKey.keep": "Leer lassen, um den aktuellen API-Schlüssel zu behalten.",
   "provider.custom.models.label": "Modelle",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

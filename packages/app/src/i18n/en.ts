@@ -185,6 +185,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "API key",
   "provider.custom.field.apiKey.placeholder": "API key",
   "provider.custom.field.apiKey.description": "Optional. Leave empty if you manage auth via headers.",
+  "provider.custom.field.apiKey.keep": "Leave empty to keep the current key.",
   "provider.custom.models.label": "Models",
   "provider.custom.models.id.label": "ID",
   "provider.custom.models.id.placeholder": "model-id",

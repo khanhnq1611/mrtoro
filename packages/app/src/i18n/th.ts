@@ -281,6 +281,7 @@ export const dict = {
   "provider.custom.field.apiKey.label": "คีย์ API",
   "provider.custom.field.apiKey.placeholder": "คีย์ API",
   "provider.custom.field.apiKey.description": "ไม่บังคับ เว้นว่างไว้หากคุณจัดการการยืนยันตัวตนผ่านส่วนหัว",
+  "provider.custom.field.apiKey.keep": "เว้นว่างไว้เพื่อใช้คีย์ API ปัจจุบันต่อไป",
   "provider.custom.models.label": "โมเดล",
   "provider.custom.models.id.label": "รหัส",
   "provider.custom.models.id.placeholder": "model-id",
