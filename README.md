@@ -157,15 +157,17 @@ Minimal example with a local OpenAI-compatible server:
       "npm": "@ai-sdk/openai-compatible",
       "options": {
         "baseURL": "http://127.0.0.1:30005/v1"
-      },
-      "models": {
-        "glm-5.3-nvfp4": { "name": "GLM 5.3" }
       }
     }
-  },
-  "model": "etprovider/glm-5.3-nvfp4"
+  }
 }
 ```
+
+With no `models` block, mrtoro offers whatever the server's `/models` lists (with the context
+length vLLM reports) and checks it again at most every 10 seconds when the model list is requested,
+so swapping the model on the server only takes a reload of the web app or a restart of the TUI. To
+pin a fixed list instead, add `"models": { "my-model": { "name": "My model" } }`, and `"model":
+"etprovider/my-model"` to make one the default.
 
 Other providers (Anthropic, OpenAI, etc.) use the standard `apiKey` option. See `mrtoro-docs` skill for the full config reference.
 

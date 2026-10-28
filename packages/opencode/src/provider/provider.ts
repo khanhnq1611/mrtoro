@@ -18,7 +18,7 @@ import { iife } from "@/util/iife"
 import { Global } from "@opencode-ai/core/global"
 import path from "path"
 import { pathToFileURL } from "url"
-import { Effect, Layer, Context, Schema, Types } from "effect"
+import { Effect, Layer, Context, Option, Schema, Types } from "effect"
 import { EffectBridge } from "@/effect/bridge"
 import { InstanceState } from "@/effect/instance-state"
 import { EffectPromise } from "@/effect/promise"
@@ -1246,6 +1246,48 @@ interface State {
   sdk: Map<string, BundledSDK>
   modelLoaders: Record<string, CustomModelLoader>
   varsLoaders: Record<string, CustomVarsLoader>
+  // mrtoro: the servers whose /models fill custom providers, with the ids they listed.
+  discovered: { checked: number; sources: { url: string; key?: string; ids: string[] }[] }
+}
+
+const OPENAI_COMPATIBLE = "@ai-sdk/openai-compatible"
+
+const ServedModels = Schema.Struct({
+  data: Schema.Array(
+    Schema.Struct({
+      id: Schema.String,
+      // vLLM reports max_model_len; OpenRouter-style servers report context_length.
+      max_model_len: Schema.optional(Schema.Number),
+      context_length: Schema.optional(Schema.Number),
+    }),
+  ),
+})
+
+// The models an OpenAI-compatible server lists, or undefined when it can't be reached.
+async function servedModels(source: { url: string; key?: string }) {
+  const response = await fetch(`${source.url.replace(/\/+$/, "")}/models`, {
+    headers: source.key ? { Authorization: `Bearer ${source.key}` } : undefined,
+    signal: AbortSignal.timeout(3_000),
+  }).catch(() => undefined)
+  if (!response?.ok) return
+  return Schema.decodeUnknownOption(ServedModels)(await response.json().catch(() => undefined)).pipe(
+    Option.map((body) =>
+      body.data.map((model) => ({ id: model.id, context: model.max_model_len ?? model.context_length })),
+    ),
+    Option.getOrUndefined,
+  )
+}
+
+// Whether a discovered server now lists other models, checked at most every 10 seconds. A server
+// that can't be reached keeps the models it listed last.
+async function servedChanged(discovered: State["discovered"]) {
+  if (discovered.sources.length === 0 || Date.now() - discovered.checked < 10_000) return false
+  discovered.checked = Date.now()
+  const lists = await Promise.all(discovered.sources.map((source) => servedModels(source)))
+  return lists.some(
+    (served, index) =>
+      served !== undefined && served.map((model) => model.id).join("\n") !== discovered.sources[index].ids.join("\n"),
+  )
 }
 
 export class Service extends Context.Service<Service, Interface>()("@opencode/Provider") {}
@@ -1514,6 +1556,7 @@ const layer = Layer.effect(
         }
 
         // extend database from config
+        const discovered: State["discovered"] = { checked: Date.now(), sources: [] }
         for (const [providerID, provider] of configProviders) {
           const existing = database[providerID]
           const parsed: Info = {
@@ -1525,7 +1568,29 @@ const layer = Layer.effect(
             models: existing?.models ?? {},
           }
 
-          for (const [modelID, model] of Object.entries(provider.models ?? {})) {
+          // mrtoro: a custom OpenAI-compatible provider that lists no models takes the ones its
+          // server's /models serves, so a test server can swap models without a config edit.
+          const url =
+            !existing && !provider.models && (provider.npm ?? OPENAI_COMPATIBLE) === OPENAI_COMPATIBLE
+              ? (provider.options?.baseURL ?? provider.api)
+              : undefined
+          const stored = url ? yield* auth.get(providerID).pipe(Effect.orDie) : undefined
+          const source = url
+            ? { url, key: provider.options?.apiKey ?? (stored?.type === "api" ? stored.key : undefined) }
+            : undefined
+          const served = source ? yield* Effect.promise(() => servedModels(source)) : undefined
+          if (source) discovered.sources.push({ ...source, ids: served?.map((model) => model.id) ?? [] })
+          const models: typeof provider.models = served
+            ? Object.fromEntries(
+                served.map((model) => [
+                  model.id,
+                  // 0 is how a model without a known output limit is stored anyway.
+                  { limit: model.context === undefined ? undefined : { context: model.context, output: 0 } },
+                ]),
+              )
+            : provider.models
+
+          for (const [modelID, model] of Object.entries(models ?? {})) {
             const existingModel = parsed.models[model.id ?? modelID]
             const apiID = model.id ?? existingModel?.api.id ?? modelID
             const apiNpm =
@@ -1760,11 +1825,16 @@ const layer = Layer.effect(
           sdk,
           modelLoaders,
           varsLoaders,
+          discovered,
         }
       }),
     )
 
-    const list = Effect.fn("Provider.list")(() => InstanceState.use(state, (s) => s.providers))
+    const list = Effect.fn("Provider.list")(function* () {
+      const s = yield* InstanceState.get(state)
+      if (yield* Effect.promise(() => servedChanged(s.discovered))) yield* InstanceState.invalidate(state)
+      return yield* InstanceState.use(state, (s) => s.providers)
+    })
 
     async function resolveSDK(model: Model, s: State, envs: Record<string, string | undefined>) {
       try {

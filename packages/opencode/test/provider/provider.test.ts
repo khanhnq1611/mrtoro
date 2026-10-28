@@ -1,4 +1,4 @@
-import { afterEach, expect, test } from "bun:test"
+import { afterAll, afterEach, expect, setSystemTime, test } from "bun:test"
 import { mkdir, unlink } from "fs/promises"
 import path from "path"
 import { LayerNode } from "@opencode-ai/core/effect/layer-node"
@@ -402,6 +402,100 @@ it.instance(
       },
     },
   },
+)
+
+// An OpenAI-compatible server whose /models answer tests can change.
+const served = {
+  status: 200,
+  models: [] as { id: string; max_model_len?: number }[],
+  requests: [] as { path: string; auth: string | null }[],
+}
+const modelServer = Bun.serve({
+  port: 0,
+  fetch(request) {
+    served.requests.push({ path: new URL(request.url).pathname, auth: request.headers.get("authorization") })
+    if (served.status !== 200) return new Response("down", { status: served.status })
+    return Response.json({ object: "list", data: served.models })
+  },
+})
+afterAll(() => modelServer.stop())
+
+const serve = (models: typeof served.models, status = 200) =>
+  Effect.sync(() => {
+    served.models = models
+    served.status = status
+    served.requests = []
+  })
+
+const servedConfig = (models?: Record<string, object>) => ({
+  config: {
+    provider: {
+      served: {
+        npm: "@ai-sdk/openai-compatible",
+        options: { apiKey: "served-key", baseURL: `${modelServer.url.origin}/v1` },
+        models,
+      },
+    },
+  },
+})
+
+const servedModelIDs = Effect.map(list, (providers) =>
+  Object.keys(providers[ProviderV2.ID.make("served")]?.models ?? {}),
+)
+
+// Moves the clock past the interval between /models checks.
+const later = Effect.sync(() => setSystemTime(new Date(Date.now() + 11_000)))
+
+it.instance(
+  "custom openai-compatible provider without models takes the ones its server lists",
+  Effect.gen(function* () {
+    yield* serve([{ id: "glm-a", max_model_len: 131072 }, { id: "glm-b" }])
+    const models = (yield* list)[ProviderV2.ID.make("served")].models
+    expect(Object.keys(models).sort()).toEqual(["glm-a", "glm-b"])
+    expect(models["glm-a"].limit.context).toBe(131072)
+    expect(models["glm-b"].limit.context).toBe(0)
+    expect(models["glm-a"].api.npm).toBe("@ai-sdk/openai-compatible")
+    expect(served.requests).toEqual([{ path: "/v1/models", auth: "Bearer served-key" }])
+  }),
+  servedConfig(),
+)
+
+it.instance(
+  "custom provider that lists its models does not ask the server",
+  Effect.gen(function* () {
+    yield* serve([{ id: "glm-a" }])
+    expect(yield* servedModelIDs).toEqual(["pinned"])
+    expect(served.requests).toEqual([])
+  }),
+  servedConfig({ pinned: { name: "Pinned" } }),
+)
+
+it.instance(
+  "custom provider follows the server when it swaps models",
+  Effect.gen(function* () {
+    yield* serve([{ id: "glm-a" }])
+    expect(yield* servedModelIDs).toEqual(["glm-a"])
+    yield* serve([{ id: "glm-c" }])
+    expect(yield* servedModelIDs).toEqual(["glm-a"])
+    yield* later
+    expect(yield* servedModelIDs).toEqual(["glm-c"])
+  }).pipe(Effect.ensuring(Effect.sync(() => setSystemTime()))),
+  servedConfig(),
+)
+
+it.instance(
+  "custom provider appears once its unreachable server comes back",
+  Effect.gen(function* () {
+    yield* serve([], 502)
+    expect(yield* servedModelIDs).toEqual([])
+    yield* serve([{ id: "glm-a" }])
+    yield* later
+    expect(yield* servedModelIDs).toEqual(["glm-a"])
+    yield* serve([], 502)
+    yield* later
+    expect(yield* servedModelIDs).toEqual(["glm-a"])
+  }).pipe(Effect.ensuring(Effect.sync(() => setSystemTime()))),
+  servedConfig(),
 )
 
 it.instance(
