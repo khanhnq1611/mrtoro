@@ -427,13 +427,13 @@ const serve = (models: typeof served.models, status = 200) =>
     served.requests = []
   })
 
-const servedConfig = (models?: Record<string, object>) => ({
+const servedConfig = (input: { models?: Record<string, object>; apiKey?: string } = { apiKey: "served-key" }) => ({
   config: {
     provider: {
       served: {
         npm: "@ai-sdk/openai-compatible",
-        options: { apiKey: "served-key", baseURL: `${modelServer.url.origin}/v1` },
-        models,
+        options: { apiKey: input.apiKey, baseURL: `${modelServer.url.origin}/v1` },
+        models: input.models,
       },
     },
   },
@@ -467,7 +467,7 @@ it.instance(
     expect(yield* servedModelIDs).toEqual(["pinned"])
     expect(served.requests).toEqual([])
   }),
-  servedConfig({ pinned: { name: "Pinned" } }),
+  servedConfig({ models: { pinned: { name: "Pinned" } } }),
 )
 
 it.instance(
@@ -481,6 +481,22 @@ it.instance(
     expect(yield* servedModelIDs).toEqual(["glm-c"])
   }).pipe(Effect.ensuring(Effect.sync(() => setSystemTime()))),
   servedConfig(),
+)
+
+// Auth is only reachable from a layer that includes it.
+const withAuth = testEffect(providerLayer())
+
+withAuth.instance(
+  "custom provider asks its server with a key saved through auth",
+  Effect.gen(function* () {
+    yield* serve([{ id: "glm-a" }])
+    const auth = yield* Auth.Service
+    yield* auth.set("served", { type: "api", key: "auth-key" })
+    expect(yield* servedModelIDs).toEqual(["glm-a"])
+    expect(served.requests).toEqual([{ path: "/v1/models", auth: "Bearer auth-key" }])
+    yield* auth.remove("served")
+  }),
+  servedConfig({}),
 )
 
 it.instance(

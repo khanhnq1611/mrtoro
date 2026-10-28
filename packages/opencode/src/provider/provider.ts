@@ -1571,7 +1571,9 @@ const layer = Layer.effect(
           // mrtoro: a custom OpenAI-compatible provider that lists no models takes the ones its
           // server's /models serves, so a test server can swap models without a config edit.
           const url =
-            !existing && !provider.models && (provider.npm ?? OPENAI_COMPATIBLE) === OPENAI_COMPATIBLE
+            !existing &&
+            Object.keys(provider.models ?? {}).length === 0 &&
+            (provider.npm ?? OPENAI_COMPATIBLE) === OPENAI_COMPATIBLE
               ? (provider.options?.baseURL ?? provider.api)
               : undefined
           const stored = url ? yield* auth.get(providerID).pipe(Effect.orDie) : undefined
