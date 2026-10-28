@@ -58,7 +58,7 @@ mrtoro config.
 
 Here the full ID is `provider_id/model_id`. For example, `anthropic/claude-sonnet-4-5`, or `myprovider/my-model` for a custom provider.
 
-If you've configured a [custom provider](providers.md#custom-provider), the `provider_id` is key from the `provider` part of your config, and the `model_id` is the key from `provider.models`.
+If you've configured a [custom provider](providers.md#custom-provider), the `provider_id` is key from the `provider` part of your config, and the `model_id` is the key from `provider.models`, or an id the server lists at `/models` when the provider has no `models` block.
 
 ---
 

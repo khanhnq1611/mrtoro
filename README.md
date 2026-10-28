@@ -15,6 +15,7 @@ Runs entirely on your machine. Connects to any LLM provider via API key or a loc
 - **Built-in tools** — bash, read, edit, write, glob, grep, webfetch, websearch (Exa), LSP, formatters, MCP
 - **Skills** — lazy-loaded Markdown knowledge files; `mrtoro-docs` (the full mrtoro reference) and `customize-mrtoro` ship inside the binary
 - **Sessions** — stored locally in SQLite at `~/.local/share/mrtoro/`
+- **Remote control** — drive mrtoro on your own machines from a browser or phone, see [Remote control](#remote-control)
 
 ---
 
@@ -171,7 +172,9 @@ pin a fixed list instead, add `"models": { "my-model": { "name": "My model" } }`
 
 To change a custom provider's URL or API key from the web app, open Settings → Providers and press
 **Edit** next to it. The new key replaces the old one where it was stored (the config file or
-`auth.json`), and leaving the key empty keeps it.
+`auth.json`), and leaving the key empty keeps it. A provider whose server stops answering stays in
+that list, marked *Could not reach &lt;host&gt;*, with **Edit** and **Disconnect**, so you can point it
+at a working server from the browser.
 
 Other providers (Anthropic, OpenAI, etc.) use the standard `apiKey` option. See `mrtoro-docs` skill for the full config reference.
 

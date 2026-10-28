@@ -71,6 +71,8 @@ Declare the provider in your global config, `~/.config/mrtoro/mrtoro.jsonc` (or 
 }
 ```
 
+For an OpenAI-compatible server the `models` block is optional: without it mrtoro offers whatever the server lists at `<baseURL>/models` and follows changes to that list.
+
 The model ID format is `provider_id/model_id`. See [Providers](providers.md) (especially [Custom provider](providers.md#custom-provider)) and [Models](models.md) for details.
 
 ---

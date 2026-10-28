@@ -2478,7 +2478,7 @@ To add any **OpenAI-compatible** provider that's not listed in the `/connect` co
    Here are the configuration options:
    - **npm**: AI SDK package to use, `@ai-sdk/openai-compatible` for OpenAI-compatible providers (for `/v1/chat/completions`). If your provider/model uses `/v1/responses`, use `@ai-sdk/openai`.
    - **name**: Display name in UI.
-   - **models**: Available models.
+   - **models**: Available models. Optional with `@ai-sdk/openai-compatible`, see [Models from the server](#models-from-the-server).
    - **options.baseURL**: API endpoint URL.
    - **options.apiKey**: Optionally set the API key, if not using auth.
    - **options.headers**: Optionally set custom headers.
@@ -2486,6 +2486,29 @@ To add any **OpenAI-compatible** provider that's not listed in the `/connect` co
    More on the advanced options in the example below.
 
 5. Run the `/models` command and your custom provider and models will appear in the selection list.
+
+---
+
+##### Models from the server
+
+Leave out `models` (or leave it empty) and mrtoro asks the server instead: it offers every model `<baseURL>/models` lists, sending the provider's API key (`options.apiKey`, or the key stored with `/connect`). The context limit comes from `max_model_len` (vLLM) or `context_length` when the server reports one.
+
+```jsonc title="~/.config/mrtoro/mrtoro.jsonc"
+{
+  "provider": {
+    "myserver": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": { "baseURL": "http://127.0.0.1:8000/v1" }
+    }
+  }
+}
+```
+
+mrtoro checks the list again at most every 10 seconds when the model list is requested, so a model swapped on the server shows up after a reload of the web app or a restart of the TUI. If the server is unreachable, the last list it served is kept. This only applies to providers that are not built in (not on models.dev) and use `@ai-sdk/openai-compatible`.
+
+##### Editing it from the web app
+
+In the web app (for example through [remote control](cli.md#remote-control)), open **Settings → Providers** and press **Edit** next to a custom provider to change its base URL or API key. The new key replaces the old one where it was stored (the config file or `auth.json`); leaving the key field empty keeps it. A provider whose server does not answer stays in the list, marked *Could not reach <host>*, with **Edit** and **Disconnect**.
 
 ---
 
@@ -2545,3 +2568,4 @@ If you are having trouble with configuring a provider, check the following:
    - Make sure the provider ID used in the `/connect` command matches the ID in your mrtoro config.
    - The right npm package is used for the provider. For example, use `@ai-sdk/cerebras` for Cerebras. And for all other OpenAI-compatible providers, use `@ai-sdk/openai-compatible` (for `/v1/chat/completions`); if a model uses `/v1/responses`, use `@ai-sdk/openai`. For mixed setups under one provider, you can override per model via `provider.npm`.
    - Check correct API endpoint is used in the `options.baseURL` field.
+   - With no `models` block, the model list comes from `<baseURL>/models`. If no models show up, check that `curl -H "Authorization: Bearer <key>" <baseURL>/models` answers.

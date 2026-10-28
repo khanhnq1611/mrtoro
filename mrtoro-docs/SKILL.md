@@ -30,7 +30,7 @@ mrtoro is a local terminal AI coding agent based on opencode, with all cloud fea
 | `reference/tui.md` | Using the TUI: `@` file refs, `!` bash, slash commands, editor setup, `tui.json`, attention |
 | `reference/keybinds.md` | Keyboard shortcuts, leader key, customizing/disabling keybinds |
 | `reference/themes.md` | Built-in themes and writing custom themes |
-| `reference/cli.md` | All `mrtoro` CLI commands and flags, environment variables (`MRTORO_*` / `OPENCODE_*`) |
+| `reference/cli.md` | All `mrtoro` CLI commands and flags (including `remote-control`: using mrtoro from a browser through a relay), environment variables (`MRTORO_*` / `OPENCODE_*`) |
 | `reference/server.md` | `mrtoro serve` headless HTTP server, auth, OpenAPI endpoints |
 | `reference/sdk.md` | JS/TS SDK (`@opencode-ai/sdk`) for controlling the server |
 | `reference/acp.md` | Agent Client Protocol: using mrtoro from Zed, JetBrains, Neovim |

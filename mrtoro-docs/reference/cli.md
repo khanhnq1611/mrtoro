@@ -342,6 +342,43 @@ mrtoro run --attach http://localhost:4096 "Explain async/await in JavaScript"
 
 ---
 
+### remote-control
+
+Control mrtoro in the current directory from a browser or phone, through a relay. The machine connects out to the relay over a WebSocket, so it needs no open port or public IP. Accounts on the relay are invite-only.
+
+```bash
+mrtoro remote-control login https://<relay>   # once per machine: prints a code and a link to approve
+cd ~/my-project
+mrtoro remote-control                         # keep it running; this directory shows up in the web UI
+```
+
+It reconnects by itself when the connection drops, and exits with status 1 when the relay refuses the machine (revoked or logged out). Inside the TUI, `/remote-control` shares the running session instead, and running it again turns that off. To keep a directory online, run the command as a systemd user service with `WorkingDirectory=` set to the project.
+
+#### Flags
+
+| Flag     | Description                                                     |
+| -------- | --------------------------------------------------------------- |
+| `--name` | Machine name shown in the web UI (default: the hostname)        |
+| `--auto` | Auto-approve permissions that are not explicitly denied         |
+
+#### login
+
+```bash
+mrtoro remote-control login [relay] [--name <name>]
+```
+
+Link this machine to your relay account. The relay defaults to `MRTORO_RELAY_URL` or the one you logged in to before.
+
+#### status
+
+Show the relay, the account, and this directory's environment.
+
+#### logout
+
+Unlink this machine from the relay. It can also be revoked from the web dashboard.
+
+---
+
 ### serve
 
 Start a headless mrtoro server for API access. Check out the [server docs](server.md) for the full HTTP interface.
