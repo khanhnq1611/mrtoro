@@ -1,5 +1,11 @@
 import { describe, expect, test } from "bun:test"
-import { adaptServerEvent, coalesceServerEvents, enqueueServerEvent, resumeStreamAfterPageShow } from "./server-sdk"
+import {
+  adaptServerEvent,
+  coalesceServerEvents,
+  enqueueServerEvent,
+  resumeStreamAfterPageShow,
+  resumeStreamOnVisible,
+} from "./server-sdk"
 import type { OpenCodeEvent } from "@opencode-ai/client/promise"
 import type { Event } from "@opencode-ai/sdk/v2/client"
 
@@ -12,6 +18,29 @@ describe("resumeStreamAfterPageShow", () => {
     resumeStreamAfterPageShow({ persisted: true } as PageTransitionEvent, start)
 
     expect(starts).toBe(1)
+  })
+})
+
+describe("resumeStreamOnVisible", () => {
+  test("ignores the tab going hidden", () => {
+    let starts = 0
+    let reconnects = 0
+    resumeStreamOnVisible("hidden", false, { start: () => starts++, reconnect: () => reconnects++ })
+    expect([starts, reconnects]).toEqual([0, 0])
+  })
+
+  test("starts a stopped stream when the tab is shown", () => {
+    let starts = 0
+    let reconnects = 0
+    resumeStreamOnVisible("visible", false, { start: () => starts++, reconnect: () => reconnects++ })
+    expect([starts, reconnects]).toEqual([1, 0])
+  })
+
+  test("reconnects a running stream when the tab is shown", () => {
+    let starts = 0
+    let reconnects = 0
+    resumeStreamOnVisible("visible", true, { start: () => starts++, reconnect: () => reconnects++ })
+    expect([starts, reconnects]).toEqual([0, 1])
   })
 })
 

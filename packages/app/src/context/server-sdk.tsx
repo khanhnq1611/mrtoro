@@ -164,6 +164,22 @@ export function resumeStreamAfterPageShow(event: PageTransitionEvent, start: () 
   start()
 }
 
+// A phone freezes a backgrounded tab without ever closing its event stream, so
+// the fetch stalls instead of throwing and the reconnect loop never fires: the
+// session then shows stale data until a manual reload. When the tab is shown
+// again, start the stream if it had stopped, otherwise reconnect the stalled
+// one. The server replays `server.connected` on reconnect, which resyncs
+// content, so the gap while hidden is filled.
+export function resumeStreamOnVisible(
+  visibility: DocumentVisibilityState,
+  started: boolean,
+  actions: { start: () => unknown; reconnect: () => unknown },
+) {
+  if (visibility !== "visible") return
+  if (started) return void actions.reconnect()
+  actions.start()
+}
+
 type ServerEventEmitter = ReturnType<typeof createGlobalEmitter<{ [key: string]: ServerEvent }>>
 type ServerSDKBase = {
   server: ServerConnection.Any
@@ -325,6 +341,9 @@ function createServerSdkContextBase(server: ServerConnection.Any, scope: ServerS
   onMount(() => {
     makeEventListener(window, "pagehide", stop)
     makeEventListener(window, "pageshow", (event) => resumeStreamAfterPageShow(event, start))
+    makeEventListener(document, "visibilitychange", () =>
+      resumeStreamOnVisible(document.visibilityState, started, { start, reconnect: () => attempt?.abort() }),
+    )
   })
 
   onCleanup(() => {
