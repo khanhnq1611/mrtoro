@@ -97,7 +97,7 @@ const RemoteControlStatusCommand = effectCmd({
       return
     }
     const check = yield* Effect.promise(() => RemoteLogin.whoami(credentials))
-    const directory = Filesystem.resolve(process.env.PWD ?? process.cwd())
+    const directory = Filesystem.resolve(process.cwd())
     UI.println("Relay       ", credentials.relay)
     UI.println("Account     ", credentials.email)
     UI.println("Device      ", credentials.deviceName)
@@ -143,7 +143,9 @@ export const RemoteControlCommand = effectCmd({
     const { RemoteEnvironment } = yield* Effect.promise(() => import("../../remote/environment"))
     const { InstanceRuntime } = yield* Effect.promise(() => import("../../project/instance-runtime"))
 
-    const directory = Filesystem.resolve(process.env.PWD ?? process.cwd())
+    // Not PWD: a service manager can hand down a stale one (systemd user managers often carry the
+    // desktop session's), which would override WorkingDirectory. resolve() follows symlinks anyway.
+    const directory = Filesystem.resolve(process.cwd())
     const envID = yield* Effect.promise(() => RemoteEnvironment.id(directory))
 
     UI.println(UI.Style.TEXT_NORMAL_BOLD + "Remote control" + UI.Style.TEXT_NORMAL, directory)
