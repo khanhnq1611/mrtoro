@@ -495,6 +495,7 @@ export const dict = {
     "Starta om Windows för att slutföra installationen av WSL och öppna sedan OpenCode igen.",
   "wsl.onboarding.next": "Nästa",
   "wsl.onboarding.refresh": "Uppdatera",
+  "command.session.refresh": "Uppdatera",
   "wsl.onboarding.allDistrosAdded": "Alla installerade distros har redan lagts till.",
   "wsl.onboarding.noDistros": "Inga distros har upptäckts ännu.",
   "wsl.onboarding.install": "Installera",

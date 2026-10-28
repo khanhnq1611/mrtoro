@@ -496,6 +496,7 @@ export const dict = {
     "WSL-ni o'rnatishni tugatish uchun Windows-ni qayta ishga tushiring, so'ngra OpenCode-ni qayta oching.",
   "wsl.onboarding.next": "Keyingi",
   "wsl.onboarding.refresh": "Yangilash",
+  "command.session.refresh": "Yangilash",
   "wsl.onboarding.allDistrosAdded": "Barcha o'rnatilgan tarqatishlar allaqachon qo'shilgan.",
   "wsl.onboarding.noDistros": "Hali hech qanday tarqatish aniqlanmadi.",
   "wsl.onboarding.install": "O'rnatish",

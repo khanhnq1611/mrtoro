@@ -501,6 +501,7 @@ export const dict = {
     "WSL की स्थापना समाप्त करने के लिए Windows को पुनरारंभ करें, फिर OpenCode को फिर से खोलें।",
   "wsl.onboarding.next": "अगला",
   "wsl.onboarding.refresh": "रीफ़्रेश करें",
+  "command.session.refresh": "रीफ़्रेश करें",
   "wsl.onboarding.allDistrosAdded": "सभी स्थापित डिस्ट्रो पहले ही जोड़े जा चुके हैं।",
   "wsl.onboarding.noDistros": "अभी तक कोई डिस्ट्रो नहीं मिला।",
   "wsl.onboarding.install": "स्थापित करें",

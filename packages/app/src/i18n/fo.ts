@@ -493,6 +493,7 @@ export const dict = {
     "Endurbyrja Windows fyri at klára at seta upp WSL, og opna síðani OpenCode aftur.",
   "wsl.onboarding.next": "Næsta",
   "wsl.onboarding.refresh": "Fríska upp",
+  "command.session.refresh": "Fríska upp",
   "wsl.onboarding.allDistrosAdded": "Allar uppsettar distros eru longu lagdar afturat.",
   "wsl.onboarding.noDistros": "Ongar útbreiðslur eru funnar enn.",
   "wsl.onboarding.install": "Set upp",

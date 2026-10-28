@@ -496,6 +496,7 @@ export const dict = {
     "Барои анҷом додани насби WSL Windows-ро аз нав оғоз кунед, сипас OpenCode-ро боз кунед.",
   "wsl.onboarding.next": "Баъдӣ",
   "wsl.onboarding.refresh": "Навсозӣ",
+  "command.session.refresh": "Навсозӣ",
   "wsl.onboarding.allDistrosAdded": "Ҳама дистрибюторҳои насбшуда аллакай илова карда шудаанд.",
   "wsl.onboarding.noDistros": "То ҳол ягон паҳнкунӣ ошкор нашудааст.",
   "wsl.onboarding.install": "Насб кунед",

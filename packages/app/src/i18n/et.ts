@@ -492,6 +492,7 @@ export const dict = {
   "wsl.onboarding.windowsRestartRequired": "Taaskäivitage Windows, et installida WSL, seejärel avage uuesti OpenCode.",
   "wsl.onboarding.next": "Edasi",
   "wsl.onboarding.refresh": "Värskenda",
+  "command.session.refresh": "Värskenda",
   "wsl.onboarding.allDistrosAdded": "Kõik installitud distrood on juba lisatud.",
   "wsl.onboarding.noDistros": "Ühtegi distrosid pole veel tuvastatud.",
   "wsl.onboarding.install": "Installige",

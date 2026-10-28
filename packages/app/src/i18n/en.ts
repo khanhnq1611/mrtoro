@@ -431,6 +431,7 @@ export const dict = {
   "wsl.onboarding.windowsRestartRequired": "Restart Windows to finish installing WSL, then reopen OpenCode.",
   "wsl.onboarding.next": "Next",
   "wsl.onboarding.refresh": "Refresh",
+  "command.session.refresh": "Refresh",
   "wsl.onboarding.allDistrosAdded": "All installed distros are already added.",
   "wsl.onboarding.noDistros": "No distros detected yet.",
   "wsl.onboarding.install": "Install",

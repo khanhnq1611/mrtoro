@@ -498,6 +498,7 @@ export const dict = {
     "Indítsa újra a Windows programot a WSL telepítésének befejezéséhez, majd nyissa meg újra a OpenCode programot.",
   "wsl.onboarding.next": "Következő",
   "wsl.onboarding.refresh": "Frissítés",
+  "command.session.refresh": "Frissítés",
   "wsl.onboarding.allDistrosAdded": "Az összes telepített disztribúció már hozzáadva van.",
   "wsl.onboarding.noDistros": "Még nem észleltek disztribúciót.",
   "wsl.onboarding.install": "Telepítés",

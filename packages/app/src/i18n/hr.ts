@@ -498,6 +498,7 @@ export const dict = {
     "Ponovo pokrenite Windows da dovršite instalaciju WSL, zatim ponovno otvorite OpenCode.",
   "wsl.onboarding.next": "Sljedeći",
   "wsl.onboarding.refresh": "Osvježiti",
+  "command.session.refresh": "Osvježiti",
   "wsl.onboarding.allDistrosAdded": "Sve instalirane distribucije su već dodane.",
   "wsl.onboarding.noDistros": "Još nije otkrivena nijedna distribucija.",
   "wsl.onboarding.install": "Instalirati",

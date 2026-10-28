@@ -496,6 +496,7 @@ export const dict = {
     "Reinicieu Windows per acabar d'instal·lar WSL i, a continuació, torneu a obrir OpenCode.",
   "wsl.onboarding.next": "A continuació",
   "wsl.onboarding.refresh": "Actualitza",
+  "command.session.refresh": "Actualitza",
   "wsl.onboarding.allDistrosAdded": "Totes les distribucions instal·lades ja s'han afegit.",
   "wsl.onboarding.noDistros": "Encara no s'ha detectat cap distribució.",
   "wsl.onboarding.install": "Instal·lar",

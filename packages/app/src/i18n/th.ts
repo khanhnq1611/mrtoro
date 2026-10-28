@@ -521,6 +521,7 @@ export const dict = {
     "รีสตาร์ท Windows เพื่อให้การติดตั้ง WSL เสร็จสมบูรณ์ แล้วเปิด OpenCode อีกครั้ง",
   "wsl.onboarding.next": "ถัดไป",
   "wsl.onboarding.refresh": "รีเฟรช",
+  "command.session.refresh": "รีเฟรช",
   "wsl.onboarding.allDistrosAdded": "เพิ่มดิสโทรที่ติดตั้งไว้ทั้งหมดแล้ว",
   "wsl.onboarding.noDistros": "ยังไม่พบดิสโทร",
   "wsl.onboarding.install": "ติดตั้ง",

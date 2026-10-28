@@ -500,6 +500,7 @@ export const dict = {
   "wsl.onboarding.windowsRestartRequired": "Khởi động lại Windows để hoàn tất cài đặt WSL, sau đó mở lại OpenCode.",
   "wsl.onboarding.next": "Tiếp theo",
   "wsl.onboarding.refresh": "Làm mới",
+  "command.session.refresh": "Làm mới",
   "wsl.onboarding.allDistrosAdded": "Tất cả các bản phân phối đã cài đặt đều đã được thêm vào.",
   "wsl.onboarding.noDistros": "Chưa phát hiện thấy bản phân phối nào.",
   "wsl.onboarding.install": "Cài đặt",

@@ -493,6 +493,7 @@ export const dict = {
     "Repornește Windows pentru a finaliza instalarea WSL, apoi redeschide OpenCode.",
   "wsl.onboarding.next": "Următorul",
   "wsl.onboarding.refresh": "Reîmprospătează",
+  "command.session.refresh": "Reîmprospătează",
   "wsl.onboarding.allDistrosAdded": "Toate distro-urile instalate sunt deja adăugate.",
   "wsl.onboarding.noDistros": "Nu a fost detectat niciun distro încă.",
   "wsl.onboarding.install": "Instalează",

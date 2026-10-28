@@ -401,6 +401,7 @@ export const dict = {
     "Viimeistele WSL:n asennus käynnistämällä Windows uudelleen ja avaa sitten OpenCode uudelleen.",
   "wsl.onboarding.next": "Seuraava",
   "wsl.onboarding.refresh": "Päivitä",
+  "command.session.refresh": "Päivitä",
   "wsl.onboarding.allDistrosAdded": "Kaikki asennetut jakelut on jo lisätty.",
   "wsl.onboarding.noDistros": "Jakeluja ei ole vielä havaittu.",
   "wsl.onboarding.install": "Asenna",

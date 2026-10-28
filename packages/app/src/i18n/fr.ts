@@ -500,6 +500,7 @@ export const dict = {
     "Redémarrez Windows pour terminer l'installation de WSL, puis rouvrez OpenCode.",
   "wsl.onboarding.next": "Suivant",
   "wsl.onboarding.refresh": "Actualiser",
+  "command.session.refresh": "Actualiser",
   "wsl.onboarding.allDistrosAdded": "Toutes les distributions installées ont déjà été ajoutées.",
   "wsl.onboarding.noDistros": "Aucune distribution détectée pour l'instant.",
   "wsl.onboarding.install": "Installer",

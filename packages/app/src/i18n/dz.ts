@@ -499,6 +499,7 @@ export const dict: Record<string, string> = {
     "WSL གཞི་བཙུགས་འབད་ནི་མཇུག་བསྡུ་ནིའི་དོན་ལུ་ Windows ལོག་འགོ་བཙུགསཔ་དང་ དེ་ལས་ OpenCode ལོག་ཁ་ཕྱེ།",
   "wsl.onboarding.next": "ཤུལ༌མའི",
   "wsl.onboarding.refresh": "གསརཔ་བཟོ།",
+  "command.session.refresh": "གསརཔ་བཟོ།",
   "wsl.onboarding.allDistrosAdded": "གཞི་བཙུགས་འབད་ཡོད་པའི་ཌིསི་ཊོ་ཚུ་ཆ་མཉམ་ཧེ་མ་ལས་ཁ་སྐོང་བརྐྱབ་ཡོདཔ་ཨིན།",
   "wsl.onboarding.noDistros": "ད་ལྟོ་ཡང་ བཀྲམ་སྤེལ་འབད་མི་ཚུ་ ཤེས་རྟོགས་མ་བྱུང་པས།",
   "wsl.onboarding.install": "བཙུགས་ནི",

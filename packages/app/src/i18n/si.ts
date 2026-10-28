@@ -493,6 +493,7 @@ export const dict: Record<string, string> = {
     "WSL ස්ථාපනය අවසන් කිරීමට Windows නැවත අරඹන්න, පසුව OpenCode නැවත විවෘත කරන්න.",
   "wsl.onboarding.next": "ඊළඟ",
   "wsl.onboarding.refresh": "නැවුම් කරන්න",
+  "command.session.refresh": "නැවුම් කරන්න",
   "wsl.onboarding.allDistrosAdded": "ස්ථාපිත සියලුම බෙදාහැරීම් දැනටමත් එකතු කර ඇත.",
   "wsl.onboarding.noDistros": "තවමත් distros අනාවරණය කර ගෙන නොමැත.",
   "wsl.onboarding.install": "ස්ථාපනය කරන්න",

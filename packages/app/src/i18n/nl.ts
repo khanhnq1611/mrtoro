@@ -495,6 +495,7 @@ export const dict = {
     "Start Windows opnieuw om de installatie van WSL te voltooien en open vervolgens OpenCode opnieuw.",
   "wsl.onboarding.next": "Volgende",
   "wsl.onboarding.refresh": "Vernieuwen",
+  "command.session.refresh": "Vernieuwen",
   "wsl.onboarding.allDistrosAdded": "Alle geïnstalleerde distributies zijn al toegevoegd.",
   "wsl.onboarding.noDistros": "Nog geen distributies gedetecteerd.",
   "wsl.onboarding.install": "Installeren",

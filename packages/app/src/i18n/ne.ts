@@ -495,6 +495,7 @@ export const dict: Record<string, string> = {
     "WSL स्थापना पूरा गर्न Windows पुन: सुरु गर्नुहोस्, त्यसपछि OpenCode पुन: खोल्नुहोस्।",
   "wsl.onboarding.next": "अर्को",
   "wsl.onboarding.refresh": "रिफ्रेस गर्नुहोस्",
+  "command.session.refresh": "रिफ्रेस गर्नुहोस्",
   "wsl.onboarding.allDistrosAdded": "सबै स्थापित distros पहिले नै थपिएको छ।",
   "wsl.onboarding.noDistros": "अहिलेसम्म कुनै डिस्ट्रोस पत्ता लागेन।",
   "wsl.onboarding.install": "स्थापना गर्नुहोस्",

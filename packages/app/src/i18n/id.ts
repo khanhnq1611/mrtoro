@@ -530,6 +530,7 @@ export const dict = {
     "Mulai ulang Windows untuk menyelesaikan instalasi WSL, lalu buka kembali OpenCode.",
   "wsl.onboarding.next": "Berikutnya",
   "wsl.onboarding.refresh": "Muat ulang",
+  "command.session.refresh": "Muat ulang",
   "wsl.onboarding.allDistrosAdded": "Semua distro yang terinstal sudah ditambahkan.",
   "wsl.onboarding.noDistros": "Belum ada distro terdeteksi.",
   "wsl.onboarding.install": "Instal",

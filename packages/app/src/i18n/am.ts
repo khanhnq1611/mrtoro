@@ -487,6 +487,7 @@ export const dict = {
   "wsl.onboarding.windowsRestartRequired": "WSLን መጫኑን ለመጨረስ Windows እንደገና ያስጀምሩ እና ከዚያ እንደገና ይክፈቱ OpenCode።",
   "wsl.onboarding.next": "ቀጣይ",
   "wsl.onboarding.refresh": "አድስ",
+  "command.session.refresh": "አድስ",
   "wsl.onboarding.allDistrosAdded": "ሁሉም የተጫኑ ዳይስትሮዎች ቀድሞ ተጨምረዋል።",
   "wsl.onboarding.noDistros": "ገና ምንም distros አልተገኘም።",
   "wsl.onboarding.install": "ጫን",

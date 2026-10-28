@@ -496,6 +496,7 @@ export const dict = {
     "Վերագործարկեք Windows՝ WSL-ի տեղադրումն ավարտելու համար, այնուհետև նորից բացեք OpenCode։",
   "wsl.onboarding.next": "Հաջորդ",
   "wsl.onboarding.refresh": "Թարմացնել",
+  "command.session.refresh": "Թարմացնել",
   "wsl.onboarding.allDistrosAdded": "Բոլոր տեղադրված բաշխումները արդեն ավելացված են։",
   "wsl.onboarding.noDistros": "Դեռևս տարածումներ չեն հայտնաբերվել։",
   "wsl.onboarding.install": "Տեղադրել",

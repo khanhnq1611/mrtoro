@@ -494,6 +494,7 @@ export const dict = {
     "Restartujte Windows pro dokončení instalace WSL a poté znovu otevřete OpenCode.",
   "wsl.onboarding.next": "Další",
   "wsl.onboarding.refresh": "Obnovit",
+  "command.session.refresh": "Obnovit",
   "wsl.onboarding.allDistrosAdded": "Všechny nainstalované distribuce jsou již přidány.",
   "wsl.onboarding.noDistros": "Dosud nebyla zjištěna žádná distribuce.",
   "wsl.onboarding.install": "Instalovat",

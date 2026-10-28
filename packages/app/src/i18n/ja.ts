@@ -493,6 +493,7 @@ export const dict = {
     "WSLのインストールを完了するにはWindowsを再起動し、OpenCodeをもう一度開いてください。",
   "wsl.onboarding.next": "次へ",
   "wsl.onboarding.refresh": "更新",
+  "command.session.refresh": "更新",
   "wsl.onboarding.allDistrosAdded": "インストール済みのディストリビューションはすべて追加済みです。",
   "wsl.onboarding.noDistros": "ディストリビューションはまだ検出されていません。",
   "wsl.onboarding.install": "インストール",

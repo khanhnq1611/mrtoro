@@ -498,6 +498,7 @@ export const dict = {
     "WSL ထည့်သွင်းခြင်း အပြီးသတ်ရန် Windows ကို ပြန်လည်စတင်ပါ၊ ထို့နောက် OpenCode ကို ပြန်လည်ဖွင့်ပါ။",
   "wsl.onboarding.next": "နောက်တစ်ခု",
   "wsl.onboarding.refresh": "ပြန်လည်စတင်ပါ။",
+  "command.session.refresh": "ပြန်လည်စတင်ပါ။",
   "wsl.onboarding.allDistrosAdded": "ထည့်သွင်းထားသည့် distros အားလုံးကို ထည့်သွင်းပြီးဖြစ်သည်။",
   "wsl.onboarding.noDistros": "မည်သည့် distros မှ ရှာမတွေ့သေးပါ။",
   "wsl.onboarding.install": "ထည့်သွင်းပါ။",

@@ -493,6 +493,7 @@ export const dict = {
   "wsl.onboarding.windowsRestartRequired": "WSL gurnamagy gutarmak üçin Windows-i täzeden açyň, soňra OpenCode açyň.",
   "wsl.onboarding.next": "Indiki",
   "wsl.onboarding.refresh": "Täzele",
+  "command.session.refresh": "Täzele",
   "wsl.onboarding.allDistrosAdded": "Gurlan distroslaryň hemmesi eýýäm goşuldy.",
   "wsl.onboarding.noDistros": "Entek hiç hili distro tapylmady.",
   "wsl.onboarding.install": "Gurnama",

@@ -493,6 +493,7 @@ export const dict = {
     "ចាប់ផ្ដើម Windows ឡើងវិញ ដើម្បីបញ្ចប់ការដំឡើង WSL បន្ទាប់មកបើក OpenCode ឡើងវិញ។",
   "wsl.onboarding.next": "បន្ទាប់",
   "wsl.onboarding.refresh": "ធ្វើឱ្យស្រស់",
+  "command.session.refresh": "ធ្វើឱ្យស្រស់",
   "wsl.onboarding.allDistrosAdded": "ការចែកចាយដែលបានដំឡើងទាំងអស់ត្រូវបានបន្ថែមរួចហើយ។",
   "wsl.onboarding.noDistros": "មិនបានរកឃើញការចែកចាយនៅឡើយទេ។",
   "wsl.onboarding.install": "ដំឡើង",

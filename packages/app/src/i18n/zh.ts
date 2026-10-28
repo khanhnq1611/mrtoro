@@ -537,6 +537,7 @@ export const dict = {
   "wsl.onboarding.windowsRestartRequired": "重启 Windows 以完成 WSL 安装，然后重新打开 OpenCode。",
   "wsl.onboarding.next": "下一步",
   "wsl.onboarding.refresh": "刷新",
+  "command.session.refresh": "刷新",
   "wsl.onboarding.allDistrosAdded": "所有已安装的发行版均已添加。",
   "wsl.onboarding.noDistros": "尚未检测到发行版。",
   "wsl.onboarding.install": "安装",

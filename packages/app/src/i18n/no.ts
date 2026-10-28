@@ -1152,6 +1152,7 @@ export const dict = {
     "Start Windows på nytt for å fullføre installasjonen av WSL, og åpne deretter OpenCode på nytt.",
   "wsl.onboarding.next": "Neste",
   "wsl.onboarding.refresh": "Oppdater",
+  "command.session.refresh": "Oppdater",
   "wsl.onboarding.allDistrosAdded": "Alle installerte distribusjoner er allerede lagt til.",
   "wsl.onboarding.noDistros": "Ingen distribusjoner oppdaget ennå.",
   "wsl.onboarding.install": "Installer",

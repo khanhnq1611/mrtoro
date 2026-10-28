@@ -503,6 +503,7 @@ export const dict = {
     "WSL انسٹال کرنے کے لیے Windows کو دوبارہ شروع کریں، پھر OpenCode کو دوبارہ کھولیں۔",
   "wsl.onboarding.next": "اگلا",
   "wsl.onboarding.refresh": "ریفریش کریں۔",
+  "command.session.refresh": "ریفریش کریں۔",
   "wsl.onboarding.allDistrosAdded": "تمام انسٹال شدہ ڈسٹرو پہلے ہی شامل کر دیے گئے ہیں۔",
   "wsl.onboarding.noDistros": "ابھی تک کسی ڈسٹرو کا پتہ نہیں چلا۔",
   "wsl.onboarding.install": "انسٹال کریں۔",

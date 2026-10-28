@@ -492,6 +492,7 @@ export const dict = {
   "wsl.onboarding.windowsRestartRequired": "ຣີສະຕາດ Windows ເພື່ອສຳເລັດການຕິດຕັ້ງ WSL, ຈາກນັ້ນເປີດ OpenCode ຄືນໃໝ່.",
   "wsl.onboarding.next": "ຕໍ່ໄປ",
   "wsl.onboarding.refresh": "ໂຫຼດຂໍ້ມູນຄືນໃໝ່",
+  "command.session.refresh": "ໂຫຼດຂໍ້ມູນຄືນໃໝ່",
   "wsl.onboarding.allDistrosAdded": "ການຕິດຕັ້ງທັງໝົດຖືກເພີ່ມແລ້ວ.",
   "wsl.onboarding.noDistros": "ບໍ່ພົບການລົບກວນເທື່ອ.",
   "wsl.onboarding.install": "ຕິດຕັ້ງ",

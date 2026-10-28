@@ -528,6 +528,7 @@ export const dict = {
     "WSL kurulumunu tamamlamak için Windows'u yeniden başlatın, ardından OpenCode'u tekrar açın.",
   "wsl.onboarding.next": "İleri",
   "wsl.onboarding.refresh": "Yenile",
+  "command.session.refresh": "Yenile",
   "wsl.onboarding.allDistrosAdded": "Kurulu tüm dağıtımlar zaten eklenmiş.",
   "wsl.onboarding.noDistros": "Henüz dağıtım algılanmadı.",
   "wsl.onboarding.install": "Kur",

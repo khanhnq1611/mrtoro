@@ -494,6 +494,7 @@ export const dict = {
     "Restartējiet Windows, lai pabeigtu WSL instalēšanu, pēc tam atveriet OpenCode no jauna.",
   "wsl.onboarding.next": "Tālāk",
   "wsl.onboarding.refresh": "Atsvaidzināt",
+  "command.session.refresh": "Atsvaidzināt",
   "wsl.onboarding.allDistrosAdded": "Visas instalētās distribūcijas jau ir pievienotas.",
   "wsl.onboarding.noDistros": "Distribūcijas vēl nav atrastas.",
   "wsl.onboarding.install": "Instalēt",

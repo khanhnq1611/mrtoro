@@ -494,6 +494,7 @@ export const dict = {
   "wsl.onboarding.windowsRestartRequired": "Rinis Windows për të përfunduar instalimin e WSL, më pas rihap OpenCode.",
   "wsl.onboarding.next": "Tjetra",
   "wsl.onboarding.refresh": "Rifresko",
+  "command.session.refresh": "Rifresko",
   "wsl.onboarding.allDistrosAdded": "Të gjitha shpërndarjet e instaluara janë shtuar tashmë.",
   "wsl.onboarding.noDistros": "Nuk është zbuluar ende asnjë shpërndarje.",
   "wsl.onboarding.install": "Instaloni",

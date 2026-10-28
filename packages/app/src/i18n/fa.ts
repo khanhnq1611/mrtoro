@@ -494,6 +494,7 @@ export const dict = {
     "Windows را مجددا راه اندازی کنید تا نصب WSL به پایان برسد، سپس OpenCode را دوباره باز کنید.",
   "wsl.onboarding.next": "بعدی",
   "wsl.onboarding.refresh": "تازه کردن",
+  "command.session.refresh": "تازه کردن",
   "wsl.onboarding.allDistrosAdded": "همه توزیع‌های نصب‌شده قبلاً اضافه شده‌اند.",
   "wsl.onboarding.noDistros": "هنوز هیچ توزیعی شناسایی نشده است.",
   "wsl.onboarding.install": "نصب کنید",

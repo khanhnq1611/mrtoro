@@ -493,6 +493,7 @@ export const dict = {
   "wsl.onboarding.windowsRestartRequired": "أعد تشغيل Windows لإكمال تثبيت WSL، ثم أعد فتح OpenCode.",
   "wsl.onboarding.next": "التالي",
   "wsl.onboarding.refresh": "تحديث",
+  "command.session.refresh": "تحديث",
   "wsl.onboarding.allDistrosAdded": "تمت إضافة جميع التوزيعات المثبتة بالفعل.",
   "wsl.onboarding.noDistros": "لم يتم اكتشاف أي توزيعات بعد.",
   "wsl.onboarding.install": "تثبيت",

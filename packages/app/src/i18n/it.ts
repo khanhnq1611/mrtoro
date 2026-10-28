@@ -403,6 +403,7 @@ export const dict = {
     "Riavvia Windows per completare l'installazione WSL, quindi riapri OpenCode.",
   "wsl.onboarding.next": "Avanti",
   "wsl.onboarding.refresh": "Aggiorna",
+  "command.session.refresh": "Aggiorna",
   "wsl.onboarding.allDistrosAdded": "Tutte le distribuzioni installate sono già aggiunte.",
   "wsl.onboarding.noDistros": "Nessuna distribuzione ancora rilevata.",
   "wsl.onboarding.install": "Installa",

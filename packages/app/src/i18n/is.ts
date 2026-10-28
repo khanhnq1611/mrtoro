@@ -498,6 +498,7 @@ export const dict = {
     "Endurræstu Windows til að klára að setja upp WSL, opnaðu síðan OpenCode aftur.",
   "wsl.onboarding.next": "Næst",
   "wsl.onboarding.refresh": "Endurnýja",
+  "command.session.refresh": "Endurnýja",
   "wsl.onboarding.allDistrosAdded": "Öllum uppsettum dreifingum er þegar bætt við.",
   "wsl.onboarding.noDistros": "Engin dreifing hefur fundist ennþá.",
   "wsl.onboarding.install": "Settu upp",

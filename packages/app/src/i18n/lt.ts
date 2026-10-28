@@ -499,6 +499,7 @@ export const dict = {
     "Iš naujo paleiskite Windows, kad užbaigtumėte WSL diegimą, tada iš naujo atidarykite OpenCode.",
   "wsl.onboarding.next": "Kitas",
   "wsl.onboarding.refresh": "Atnaujinti",
+  "command.session.refresh": "Atnaujinti",
   "wsl.onboarding.allDistrosAdded": "Visos įdiegtos distribucijos jau pridėtos.",
   "wsl.onboarding.noDistros": "Dar neaptikta jokių paskirstymų.",
   "wsl.onboarding.install": "Įdiegti",

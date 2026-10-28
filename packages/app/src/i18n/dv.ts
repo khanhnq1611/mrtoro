@@ -500,6 +500,7 @@ export const dict = {
     "WSL އިންސްޓޯލް ކުރުން ނިންމުމަށް Windows އަލުން ސްޓާޓްކޮށް، ދެން OpenCode އަލުން ހުޅުވާށެވެ.",
   "wsl.onboarding.next": "ދެން",
   "wsl.onboarding.refresh": "ރިފްރެޝް ކޮށްލާށެވެ",
+  "command.session.refresh": "ރިފްރެޝް ކޮށްލާށެވެ",
   "wsl.onboarding.allDistrosAdded": "އިންސްޓޯލްކޮށްފައިވާ ހުރިހާ ޑިސްޓްރޯތަކެއް މިހާރުވެސް އިތުރުކޮށްފައިވެއެވެ.",
   "wsl.onboarding.noDistros": "އަދި ޑިސްޓްރޯއެއް ހޯދިފައެއް ނުވެއެވެ.",
   "wsl.onboarding.install": "އެޅުން",

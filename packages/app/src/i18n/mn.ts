@@ -497,6 +497,7 @@ export const dict = {
     "WSL-г суулгаж дуусгахын тулд Windows-г дахин эхлүүлээд OpenCode-г дахин нээнэ үү.",
   "wsl.onboarding.next": "Дараа нь",
   "wsl.onboarding.refresh": "Сэргээх",
+  "command.session.refresh": "Сэргээх",
   "wsl.onboarding.allDistrosAdded": "Бүх суулгасан түгээлтүүд аль хэдийн нэмэгдсэн байна.",
   "wsl.onboarding.noDistros": "Одоогоор ямар ч түгээлт илрээгүй байна.",
   "wsl.onboarding.install": "Суулгах",

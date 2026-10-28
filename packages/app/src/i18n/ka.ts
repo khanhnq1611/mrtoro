@@ -494,6 +494,7 @@ export const dict = {
     "გადატვირთეთ Windows WSL-ის ინსტალაციის დასასრულებლად, შემდეგ ხელახლა გახსენით OpenCode.",
   "wsl.onboarding.next": "შემდეგი",
   "wsl.onboarding.refresh": "განახლება",
+  "command.session.refresh": "განახლება",
   "wsl.onboarding.allDistrosAdded": "ყველა დაინსტალირებული დისტრო უკვე დამატებულია.",
   "wsl.onboarding.noDistros": "გავრცელება ჯერ არ არის გამოვლენილი.",
   "wsl.onboarding.install": "ინსტალაცია",

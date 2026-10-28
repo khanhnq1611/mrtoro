@@ -957,6 +957,7 @@ export const dict = {
   "wsl.onboarding.windowsRestartRequired": "WSL 설치를 완료하려면 Windows를 다시 시작한 다음 OpenCode를 다시 여세요.",
   "wsl.onboarding.next": "다음",
   "wsl.onboarding.refresh": "새로 고침",
+  "command.session.refresh": "새로 고침",
   "wsl.onboarding.allDistrosAdded": "설치된 모든 배포판이 이미 추가되었습니다.",
   "wsl.onboarding.noDistros": "아직 감지된 배포판이 없습니다.",
   "wsl.onboarding.install": "설치",

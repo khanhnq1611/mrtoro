@@ -149,6 +149,19 @@ export function SessionHeader() {
   const terminal = useTerminal()
   const { params, view } = useSessionLayout()
 
+  // Manual "refresh now" for the current session: refetch its info and messages
+  // instead of waiting for the live stream to resync, which can lag on a phone
+  // that just came back from the background.
+  const [refreshing, setRefreshing] = createSignal(false)
+  const refreshSession = () => {
+    const id = params.id
+    if (!id || refreshing()) return
+    setRefreshing(true)
+    void sync()
+      .session.sync(id, { force: true })
+      .finally(() => setRefreshing(false))
+  }
+
   const projectDirectory = createMemo(() => decode64(params.dir) ?? "")
   const project = createMemo(() => {
     const directory = projectDirectory()
@@ -238,6 +251,9 @@ export function SessionHeader() {
   const v2ActionsState = createMemo<SessionHeaderV2ActionsState>(() => ({
     statusVisible: status(),
     statusLabel: language.t("status.popover.trigger"),
+    refreshLabel: language.t("command.session.refresh"),
+    refreshing: refreshing(),
+    onRefresh: refreshSession,
     reviewLabel: language.t("command.review.toggle"),
     reviewKeybind: reviewTooltipKeybind(command),
     reviewVisible: isDesktop(),
@@ -522,6 +538,9 @@ export function SessionHeader() {
 type SessionHeaderV2ActionsState = {
   statusVisible: boolean
   statusLabel: string
+  refreshLabel: string
+  refreshing: boolean
+  onRefresh: () => void
   reviewLabel: string
   reviewKeybind: string[]
   reviewVisible: boolean
@@ -534,6 +553,18 @@ function SessionHeaderV2Actions(props: { state: SessionHeaderV2ActionsState }) {
 
   return (
     <div class="flex items-center gap-2">
+      <TooltipV2 class="shrink-0" placement="bottom" value={props.state.refreshLabel}>
+        <IconButtonV2
+          type="button"
+          variant="ghost-muted"
+          size="large"
+          class="!w-9 shrink-0"
+          disabled={props.state.refreshing}
+          onClick={props.state.onRefresh}
+          aria-label={props.state.refreshLabel}
+          icon={<IconV2 name="refresh" class={props.state.refreshing ? "animate-spin" : undefined} />}
+        />
+      </TooltipV2>
       <Show when={props.state.statusVisible}>
         <Tooltip placement="bottom" value={props.state.statusLabel}>
           <StatusPopoverV2 />
