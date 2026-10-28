@@ -38,6 +38,8 @@ import { tabKey, useTabs } from "@/context/tabs"
 import type { PromptSession } from "@/context/prompt"
 import "./titlebar.css"
 import { newTabTooltipKeybind } from "./command-tooltip-keybind"
+import { Mark } from "@opencode-ai/ui/logo"
+import { relayEnvironment } from "@/utils/relay"
 import { normalizeSessionInfo } from "@/utils/session"
 
 const legacyTitlebarHeight = 40
@@ -371,6 +373,20 @@ export function Titlebar(props: { update?: TitlebarUpdate; debugTools?: { visibl
                 <ChannelIndicator debugTools={props.debugTools} />
                 <Show when={windows() || linux()}>
                   <WindowsAppMenu command={command} platform={platform} variant="v2" />
+                </Show>
+                {/* mrtoro: back to the relay's dashboard (all machines), outside this app;
+                    rel="external" keeps the router from handling it as an in-app route. */}
+                <Show when={relayEnvironment}>
+                  <TooltipV2 placement="bottom" value="torolab" class="shrink-0">
+                    <a
+                      href="/"
+                      rel="external"
+                      aria-label="torolab"
+                      class="flex h-9 w-11 shrink-0 items-center justify-center rounded-md hover:bg-v2-overlay-simple-overlay-hover"
+                    >
+                      <Mark class="!w-7" />
+                    </a>
+                  </TooltipV2>
                 </Show>
                 <TooltipV2
                   placement="bottom"

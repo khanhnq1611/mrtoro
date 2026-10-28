@@ -1,6 +1,7 @@
 ;(function () {
   var key = "opencode-theme-id"
-  var themeId = localStorage.getItem(key) || "oc-2"
+  // mrtoro: torolab is the default theme (see ThemeProvider in src/app.tsx).
+  var themeId = localStorage.getItem(key) || "torolab"
 
   if (themeId === "oc-1") {
     themeId = "oc-2"

@@ -1,62 +1,138 @@
-import { type ComponentProps } from "solid-js"
+import { createUniqueId, type ComponentProps } from "solid-js"
 
-export const Mark = (props: { class?: string }) => {
+// mrtoro: the torolab artwork, i.e. the bull and wordmark of the TUI banner
+// (packages/tui/src/logo.ts), drawn as pixels: █ fills a cell and ▀ / ▄ its top
+// / bottom half, so a cell is one unit wide and two tall. As in the TUI, columns
+// left of the split glow red and the rest sit in grey.
+const BULL = [
+  "   ▄██                            ██▄",
+  "  ████                            ████",
+  " █████                            █████",
+  " ▀█████▄      ▄▄▄▄▄▄▄▄▄▄▄▄      ▄█████▀",
+  "  ▀████████▄▄██████████████▄▄████████▀",
+  "▄   ▀▀████████████████████████████▀▀   ▄",
+  "████▄▄▀██████████████████████████▀▄▄████",
+  " ▀█████ ███▀▀██████████████▀▀███ █████▀",
+  "   ▀▀▀  ████▄▄ ▀▀██████▀▀ ▄▄████  ▀▀▀",
+  "         ██████████████████████",
+  "          ████████████████████",
+  "           ████▀▀██████▀▀████",
+  "           ▀███▄▄██████▄▄███▀",
+  "              ▀▀████████▀▀",
+]
+const WORDMARK = [
+  "   ▀█▀ █▀▀█ █▀▀▄ █▀▀█ █    █▀▀█ █▀▀▄",
+  "    █  █  █ █▀▀▄ █  █ █    █▀▀█ █▀▀▄",
+  "    ▀  ▀▀▀▀ ▀  ▀ ▀▀▀▀ ▀▀▀▀ ▀  ▀ ▀▀▀ ",
+]
+const BULL_SPLIT = 20
+const WORDMARK_SPLIT = 21
+// In the banner the wordmark sits one blank row under the bull, as in the TUI.
+const BANNER_WORDMARK_ROW = BULL.length + 1
+
+// One rectangle per horizontal run of lit half-cells within columns [from, to),
+// with the art's first line drawn at text row `row`.
+function pixelPath(lines: string[], from: number, to: number, row = 0) {
+  return lines
+    .flatMap((line, index) =>
+      [0, 1].flatMap((half) => {
+        const lit = Array.from({ length: to - from }, (_, column) => {
+          const char = line[from + column] ?? " "
+          return char === "█" || char === (half === 0 ? "▀" : "▄")
+        })
+        return lit.flatMap((on, column) => {
+          if (!on || lit[column - 1]) return []
+          const end = lit.indexOf(false, column)
+          const x = from + column
+          return [`M${x} ${(row + index) * 2 + half}h${(end === -1 ? lit.length : end) - column}v1H${x}z`]
+        })
+      }),
+    )
+    .join("")
+}
+
+const BULL_RED = pixelPath(BULL, 0, BULL_SPLIT)
+const BULL_GREY = pixelPath(BULL, BULL_SPLIT, 40)
+const WORDMARK_RED = pixelPath(WORDMARK, 0, WORDMARK_SPLIT)
+const WORDMARK_GREY = pixelPath(WORDMARK, WORDMARK_SPLIT, 40)
+const BANNER_WORDMARK_RED = pixelPath(WORDMARK, 0, WORDMARK_SPLIT, BANNER_WORDMARK_ROW)
+const BANNER_WORDMARK_GREY = pixelPath(WORDMARK, WORDMARK_SPLIT, 40, BANNER_WORDMARK_ROW)
+
+// Both halves darken from top to bottom, like the TUI's per-row gradient.
+function Gradients(props: { red: string; grey: string; height: number }) {
   return (
-    <svg
-      data-component="logo-mark"
-      classList={{ [props.class ?? ""]: !!props.class }}
-      viewBox="0 0 16 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path data-slot="logo-logo-mark-shadow" d="M12 16H4V8H12V16Z" fill="var(--icon-weak-base)" />
-      <path data-slot="logo-logo-mark-o" d="M12 4H4V16H12V4ZM16 20H0V0H16V20Z" fill="var(--icon-strong-base)" />
-    </svg>
+    <defs>
+      <linearGradient id={props.red} x1="0" y1="0" x2="0" y2={props.height} gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#ff2d46" />
+        <stop offset="1" stop-color="#aa0019" />
+      </linearGradient>
+      <linearGradient id={props.grey} x1="0" y1="0" x2="0" y2={props.height} gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#a5a5af" />
+        <stop offset="1" stop-color="#6e6e78" />
+      </linearGradient>
+    </defs>
   )
 }
 
-export const Splash = (props: Pick<ComponentProps<"svg">, "ref" | "class">) => {
+function Bull(props: { component: string; class?: string; ref?: ComponentProps<"svg">["ref"] }) {
+  const red = createUniqueId()
+  const grey = createUniqueId()
   return (
     <svg
       ref={props.ref}
-      data-component="logo-splash"
+      data-component={props.component}
       classList={{ [props.class ?? ""]: !!props.class }}
-      viewBox="0 0 80 100"
-      fill="none"
+      viewBox="0 0 40 28"
+      shape-rendering="crispEdges"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d="M60 80H20V40H60V80Z" fill="var(--icon-base)" />
-      <path d="M60 20H20V80H60V20ZM80 100H0V0H80V100Z" fill="var(--icon-strong-base)" />
+      <Gradients red={red} grey={grey} height={28} />
+      <path d={BULL_RED} fill={`url(#${red})`} />
+      <path d={BULL_GREY} fill={`url(#${grey})`} />
     </svg>
   )
 }
 
+export const Mark = (props: { class?: string }) => <Bull component="logo-mark" class={props.class} />
+
+export const Splash = (props: Pick<ComponentProps<"svg">, "ref" | "class">) => (
+  <Bull component="logo-splash" class={props.class} ref={props.ref} />
+)
+
 export const Logo = (props: { class?: string }) => {
+  const red = createUniqueId()
+  const grey = createUniqueId()
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 234 42"
-      fill="none"
+      viewBox="3 0 33 6"
+      shape-rendering="crispEdges"
       classList={{ [props.class ?? ""]: !!props.class }}
     >
-      <g>
-        <path d="M18 30H6V18H18V30Z" fill="var(--icon-weak-base)" />
-        <path d="M18 12H6V30H18V12ZM24 36H0V6H24V36Z" fill="var(--icon-base)" />
-        <path d="M48 30H36V18H48V30Z" fill="var(--icon-weak-base)" />
-        <path d="M36 30H48V12H36V30ZM54 36H36V42H30V6H54V36Z" fill="var(--icon-base)" />
-        <path d="M84 24V30H66V24H84Z" fill="var(--icon-weak-base)" />
-        <path d="M84 24H66V30H84V36H60V6H84V24ZM66 18H78V12H66V18Z" fill="var(--icon-base)" />
-        <path d="M108 36H96V18H108V36Z" fill="var(--icon-weak-base)" />
-        <path d="M108 12H96V36H90V6H108V12ZM114 36H108V12H114V36Z" fill="var(--icon-base)" />
-        <path d="M144 30H126V18H144V30Z" fill="var(--icon-weak-base)" />
-        <path d="M144 12H126V30H144V36H120V6H144V12Z" fill="var(--icon-strong-base)" />
-        <path d="M168 30H156V18H168V30Z" fill="var(--icon-weak-base)" />
-        <path d="M168 12H156V30H168V12ZM174 36H150V6H174V36Z" fill="var(--icon-strong-base)" />
-        <path d="M198 30H186V18H198V30Z" fill="var(--icon-weak-base)" />
-        <path d="M198 12H186V30H198V12ZM204 36H180V6H198V0H204V36Z" fill="var(--icon-strong-base)" />
-        <path d="M234 24V30H216V24H234Z" fill="var(--icon-weak-base)" />
-        <path d="M216 12V18H228V12H216ZM234 24H216V30H234V36H210V6H234V24Z" fill="var(--icon-strong-base)" />
-      </g>
+      <Gradients red={red} grey={grey} height={6} />
+      <path d={WORDMARK_RED} fill={`url(#${red})`} />
+      <path d={WORDMARK_GREY} fill={`url(#${grey})`} />
+    </svg>
+  )
+}
+
+// The whole TUI banner: the bull above the wordmark.
+export const Banner = (props: { class?: string }) => {
+  const red = createUniqueId()
+  const grey = createUniqueId()
+  return (
+    <svg
+      data-component="logo-banner"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 40 36"
+      shape-rendering="crispEdges"
+      classList={{ [props.class ?? ""]: !!props.class }}
+      role="img"
+      aria-label="torolab"
+    >
+      <Gradients red={red} grey={grey} height={36} />
+      <path d={BULL_RED + BANNER_WORDMARK_RED} fill={`url(#${red})`} />
+      <path d={BULL_GREY + BANNER_WORDMARK_GREY} fill={`url(#${grey})`} />
     </svg>
   )
 }

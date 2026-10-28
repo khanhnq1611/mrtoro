@@ -43,4 +43,13 @@ describe("theme preload", () => {
     expect(document.documentElement.dataset.theme).toBe("nightowl")
     expect(document.getElementById("oc-theme-preload")?.textContent).toContain("--background-base:#fff;")
   })
+
+  test("uses the cached torolab css when no theme was chosen", () => {
+    localStorage.setItem("opencode-theme-css-light", "--background-base:#fff;")
+
+    run()
+
+    expect(document.documentElement.dataset.theme).toBe("torolab")
+    expect(document.getElementById("oc-theme-preload")?.textContent).toContain("--background-base:#fff;")
+  })
 })
