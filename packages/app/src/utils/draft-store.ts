@@ -22,6 +22,12 @@ function blobUrl(id: string, blob: Blob) {
 }
 
 async function blobID(blob: Blob) {
+  // crypto.subtle is undefined on insecure (http:) origins; fall back to random ids there.
+  if (!crypto.subtle) {
+    return Array.from(crypto.getRandomValues(new Uint8Array(16)))
+      .map((byte) => byte.toString(16).padStart(2, "0"))
+      .join("")
+  }
   const id = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", await blob.arrayBuffer())))
     .map((byte) => byte.toString(16).padStart(2, "0"))
     .join("")

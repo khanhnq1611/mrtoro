@@ -41,6 +41,9 @@ const IMAGE_EXTS = new Map([
   ["jpg", "image/jpeg"],
   ["png", "image/png"],
   ["webp", "image/webp"],
+  ["heic", "image/heic"],
+  ["heif", "image/heif"],
+  ["avif", "image/avif"],
 ])
 const TEXT_MIMES = new Set([
   "application/json",
@@ -95,4 +98,51 @@ export async function attachmentMime(file: File) {
   const bytes = new Uint8Array(await file.slice(0, SAMPLE).arrayBuffer())
   if (!textBytes(bytes)) return
   return "text/plain"
+}
+
+// Mimes the server-side image pipeline (Photon) can decode on its own.
+const SERVER_IMAGE_MIMES = new Set(["image/png", "image/jpeg", "image/gif", "image/webp"])
+const CONVERT_MAX_DIMENSION = 1920
+const CONVERT_MAX_BYTES = 4 * 1024 * 1024
+const CONVERT_TIMEOUT_MS = 2000
+const CONVERT_JPEG_QUALITY = 0.85
+
+// Re-encodes an image through the browser's decoder before it is attached, so
+// formats the server cannot decode (HEIC, AVIF, ...) become JPEG/PNG and huge
+// photos are downscaled. Anything the browser itself cannot decode is returned
+// unchanged; the server degrades such attachments to a note instead of failing
+// the prompt.
+export async function convertImageFile(file: File, mime: string): Promise<{ file: File; mime: string }> {
+  if (!mime.startsWith("image/") || mime === "image/gif") return { file, mime }
+  if (typeof createImageBitmap !== "function" || typeof document === "undefined") return { file, mime }
+  try {
+    const converted = await Promise.race([
+      (async () => {
+        const bitmap = await createImageBitmap(file)
+        try {
+          const oversized =
+            bitmap.width > CONVERT_MAX_DIMENSION || bitmap.height > CONVERT_MAX_DIMENSION || file.size > CONVERT_MAX_BYTES
+          if (SERVER_IMAGE_MIMES.has(mime) && !oversized) return undefined
+          const scale = Math.min(1, CONVERT_MAX_DIMENSION / Math.max(bitmap.width, bitmap.height))
+          const canvas = document.createElement("canvas")
+          canvas.width = Math.max(1, Math.round(bitmap.width * scale))
+          canvas.height = Math.max(1, Math.round(bitmap.height * scale))
+          const ctx = canvas.getContext("2d")
+          if (!ctx) return undefined
+          ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
+          const type = mime === "image/png" ? "image/png" : "image/jpeg"
+          const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, type, CONVERT_JPEG_QUALITY))
+          if (!blob) return undefined
+          return { blob, type }
+        } finally {
+          bitmap.close()
+        }
+      })(),
+      new Promise<undefined>((resolve) => setTimeout(() => resolve(undefined), CONVERT_TIMEOUT_MS)),
+    ])
+    if (!converted) return { file, mime }
+    return { file: new File([converted.blob], file.name, { type: converted.type }), mime: converted.type }
+  } catch {
+    return { file, mime }
+  }
 }

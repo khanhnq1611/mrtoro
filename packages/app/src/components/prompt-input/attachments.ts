@@ -7,7 +7,7 @@ import { usePlatform } from "@/context/platform"
 import { uuid } from "@/utils/uuid"
 import { getCursorPosition } from "./editor-dom"
 import { createBlobReference, type DraftStore } from "@/utils/draft-store"
-import { attachmentMime } from "./files"
+import { attachmentMime, convertImageFile } from "./files"
 import { normalizePaste, pasteMode } from "./paste"
 
 type PromptTarget = Pick<ReturnType<ReturnType<typeof usePrompt>["capture"]>, "current" | "cursor" | "set">
@@ -51,13 +51,16 @@ export function createPromptAttachmentsCore(input: PromptAttachmentsCoreInput) {
       return false
     }
 
+    const converted = await convertImageFile(file, mime)
     const attachment: ImageAttachmentPart = {
       type: "image",
       id: uuid(),
       filename: file.name,
       sourcePath: input.getPathForFile?.(file) || undefined,
-      mime,
-      blob: input.draftStore ? await input.draftStore.putBlob(file) : await createBlobReference(file),
+      mime: converted.mime,
+      blob: input.draftStore
+        ? await input.draftStore.putBlob(converted.file)
+        : await createBlobReference(converted.file),
     }
     target.prompt.set([...target.prompt.current(), attachment], target.cursor)
     return true

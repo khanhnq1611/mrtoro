@@ -2,11 +2,14 @@ import { onMount } from "solid-js"
 import { makeEventListener } from "@solid-primitives/event-listener"
 import type { PromptInputV2Attachment, PromptInputV2Prompt } from "./types"
 
-const accepted = [
+export const accepted = [
   "image/png",
   "image/jpeg",
   "image/gif",
   "image/webp",
+  "image/heic",
+  "image/heif",
+  "image/avif",
   "application/pdf",
   "text/*",
   "application/json",
@@ -103,7 +106,8 @@ export function createPromptInputV2Attachments(
       if (toast) input.warn()
       return false
     }
-    const blob = input.store ? await input.store(file) : await blobReference(file)
+    const converted = await convertImageFile(file, mime)
+    const blob = input.store ? await input.store(converted.file) : await blobReference(converted.file)
     const sourcePath = input.getPathForFile?.(file) || undefined
     // Native clipboard images arrive with a fresh timestamped filename on every paste, so identical
     // clipboard content is matched on bytes alone.
@@ -126,7 +130,7 @@ export function createPromptInputV2Attachments(
       id: globalThis.crypto?.randomUUID?.() ?? Math.random().toString(16).slice(2),
       filename: file.name,
       sourcePath,
-      mime,
+      mime: converted.mime,
       blob,
     }
     target.prompt.set([...target.prompt.current(), attachment], target.cursor)
@@ -219,10 +223,13 @@ export function createPromptInputV2Attachments(
   }
 }
 
-const imageMimes = new Set(["image/png", "image/jpeg", "image/gif", "image/webp"])
+const imageMimes = new Set(["image/png", "image/jpeg", "image/gif", "image/webp", "image/heic", "image/heif", "image/avif"])
 
 async function blobReference(file: File) {
-  const id = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", await file.arrayBuffer())))
+  // crypto.subtle is undefined on insecure (http:) origins; fall back to random ids there.
+  const bytes =
+    crypto.subtle ? new Uint8Array(await crypto.subtle.digest("SHA-256", await file.arrayBuffer())) : crypto.getRandomValues(new Uint8Array(16))
+  const id = Array.from(bytes)
     .map((byte) => byte.toString(16).padStart(2, "0"))
     .join("")
   return { id, url: URL.createObjectURL(file) }
@@ -233,6 +240,9 @@ const imageExtensions = new Map([
   ["jpg", "image/jpeg"],
   ["png", "image/png"],
   ["webp", "image/webp"],
+  ["heic", "image/heic"],
+  ["heif", "image/heif"],
+  ["avif", "image/avif"],
 ])
 const textMimes = new Set([
   "application/json",
@@ -259,6 +269,53 @@ async function attachmentMime(file: File) {
   const control = bytes.filter((byte) => byte < 9 || (byte > 13 && byte < 32)).length
   if (bytes.length > 0 && control / bytes.length > 0.3) return
   return "text/plain"
+}
+
+// Mimes the server-side image pipeline (Photon) can decode on its own.
+const serverImageMimes = new Set(["image/png", "image/jpeg", "image/gif", "image/webp"])
+const convertMaxDimension = 1920
+const convertMaxBytes = 4 * 1024 * 1024
+const convertTimeoutMs = 2000
+const convertJpegQuality = 0.85
+
+// Re-encodes an image through the browser's decoder before it is attached, so
+// formats the server cannot decode (HEIC, AVIF, ...) become JPEG/PNG and huge
+// photos are downscaled. Anything the browser itself cannot decode is returned
+// unchanged; the server degrades such attachments to a note instead of failing
+// the prompt.
+async function convertImageFile(file: File, mime: string): Promise<{ file: File; mime: string }> {
+  if (!mime.startsWith("image/") || mime === "image/gif") return { file, mime }
+  if (typeof createImageBitmap !== "function" || typeof document === "undefined") return { file, mime }
+  try {
+    const converted = await Promise.race([
+      (async () => {
+        const bitmap = await createImageBitmap(file)
+        try {
+          const oversized =
+            bitmap.width > convertMaxDimension || bitmap.height > convertMaxDimension || file.size > convertMaxBytes
+          if (serverImageMimes.has(mime) && !oversized) return undefined
+          const scale = Math.min(1, convertMaxDimension / Math.max(bitmap.width, bitmap.height))
+          const canvas = document.createElement("canvas")
+          canvas.width = Math.max(1, Math.round(bitmap.width * scale))
+          canvas.height = Math.max(1, Math.round(bitmap.height * scale))
+          const ctx = canvas.getContext("2d")
+          if (!ctx) return undefined
+          ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
+          const type = mime === "image/png" ? "image/png" : "image/jpeg"
+          const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, type, convertJpegQuality))
+          if (!blob) return undefined
+          return { blob, type }
+        } finally {
+          bitmap.close()
+        }
+      })(),
+      new Promise<undefined>((resolve) => setTimeout(() => resolve(undefined), convertTimeoutMs)),
+    ])
+    if (!converted) return { file, mime }
+    return { file: new File([converted.blob], file.name, { type: converted.type }), mime: converted.type }
+  } catch {
+    return { file, mime }
+  }
 }
 
 function cursorPosition(editor: HTMLElement) {

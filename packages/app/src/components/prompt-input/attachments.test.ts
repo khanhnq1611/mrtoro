@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { attachmentMime, pickAttachmentFiles } from "./files"
+import { attachmentMime, convertImageFile, pickAttachmentFiles } from "./files"
 import { pasteMode } from "./paste"
 
 describe("attachmentMime", () => {
@@ -21,6 +21,29 @@ describe("attachmentMime", () => {
   test("rejects binary files", async () => {
     const file = new File([Uint8Array.of(0, 255, 1, 2)], "blob.bin", { type: "application/octet-stream" })
     expect(await attachmentMime(file)).toBeUndefined()
+  })
+
+  test("accepts HEIC and AVIF photos without a browser mime", async () => {
+    const heic = new File([Uint8Array.of(0, 0, 0, 24)], "IMG_0001.heic", { type: "" })
+    expect(await attachmentMime(heic)).toBe("image/heic")
+    const avif = new File([Uint8Array.of(0, 0, 0, 24)], "photo.avif", { type: "application/octet-stream" })
+    expect(await attachmentMime(avif)).toBe("image/avif")
+  })
+})
+
+describe("convertImageFile", () => {
+  test("returns the original when the browser cannot decode images", async () => {
+    const file = new File([Uint8Array.of(1, 2, 3, 4)], "photo.heic", { type: "image/heic" })
+    const result = await convertImageFile(file, "image/heic")
+    expect(result.file).toBe(file)
+    expect(result.mime).toBe("image/heic")
+  })
+
+  test("leaves gifs and non-images untouched", async () => {
+    const gif = new File([Uint8Array.of(1, 2, 3, 4)], "loop.gif", { type: "image/gif" })
+    expect((await convertImageFile(gif, "image/gif")).file).toBe(gif)
+    const pdf = new File(["%PDF-1.7"], "guide.pdf", { type: "application/pdf" })
+    expect((await convertImageFile(pdf, "application/pdf")).file).toBe(pdf)
   })
 })
 
