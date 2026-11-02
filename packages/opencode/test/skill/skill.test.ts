@@ -9,6 +9,7 @@ import { Config } from "../../src/config/config"
 import { CrossSpawnSpawner } from "@opencode-ai/core/cross-spawn-spawner"
 import { FSUtil } from "@opencode-ai/core/fs-util"
 import { Global } from "@opencode-ai/core/global"
+import { DefaultSkills } from "@opencode-ai/core/plugin/skill/defaults"
 import { provideInstance, provideTmpdirInstance, testInstanceStoreLayer, tmpdir } from "../fixture/fixture"
 import { testEffect } from "../lib/effect"
 import path from "path"
@@ -17,7 +18,12 @@ import fs from "fs/promises"
 const node = LayerNode.compile(CrossSpawnSpawner.node)
 
 // Built-ins are registered in every instance; most tests only look at discovered skills.
-const discovered = (skill: Skill.Info) => !["customize-mrtoro", "mrtoro-docs"].includes(skill.name)
+const builtinNames = [
+  "customize-mrtoro",
+  "mrtoro-docs",
+  ...DefaultSkills.skills.map((skill) => skill.name),
+]
+const discovered = (skill: Skill.Info) => !builtinNames.includes(skill.name)
 
 const it = testEffect(Layer.mergeAll(LayerNode.compile(Skill.node), node, testInstanceStoreLayer))
 const itWithoutClaudeCodeSkills = testEffect(
@@ -620,6 +626,22 @@ description: My own copy of the mrtoro docs that replaces the built-in one.
           const docs = yield* skill.require("mrtoro-docs")
           expect(docs.location).toBe(path.join(dir, ".opencode", "skill", "mrtoro-docs", "SKILL.md"))
           expect(docs.description).toContain("replaces the built-in")
+        }),
+      { git: true },
+    ),
+  )
+
+  it.live("default skills ship on every instance", () =>
+    provideTmpdirInstance(
+      () =>
+        Effect.gen(function* () {
+          const skill = yield* Skill.Service
+          for (const def of DefaultSkills.skills) {
+            const info = yield* skill.require(def.name)
+            expect(info.location).toBe("<built-in>")
+            expect(info.description).toBe(def.description)
+            expect(info.content).toContain(def.content.trim().slice(0, 40))
+          }
         }),
       { git: true },
     ),

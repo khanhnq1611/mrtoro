@@ -5,6 +5,7 @@ import { Effect } from "effect"
 import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
 import { SkillPlugin } from "@opencode-ai/core/plugin/skill"
 import { MrtoroDocs } from "@opencode-ai/core/plugin/skill/mrtoro-docs"
+import { DefaultSkills } from "@opencode-ai/core/plugin/skill/defaults"
 import { SkillV2 } from "@opencode-ai/core/skill"
 import { testEffect } from "../lib/effect"
 import { host } from "./host"
@@ -35,6 +36,18 @@ describe("SkillPlugin.Plugin", () => {
       expect(docs?.description).toContain("Official mrtoro documentation")
       expect(docs?.location).toEndWith("/SKILL.md")
       expect(existsSync(path.join(path.dirname(docs?.location ?? ""), "reference", "providers.md"))).toBe(true)
+    }),
+  )
+
+  it.effect("registers every default skill", () =>
+    Effect.gen(function* () {
+      const skill = yield* SkillV2.Service
+      yield* SkillPlugin.Plugin.effect(host({ skill: { ...skill, reload: skill.reload } }))
+
+      const list = yield* skill.list()
+      for (const def of DefaultSkills.skills) {
+        expect(list).toContainEqual(expect.objectContaining({ name: def.name, description: def.description }))
+      }
     }),
   )
 

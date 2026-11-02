@@ -8,6 +8,7 @@ import { AbsolutePath } from "../schema"
 import { SkillV2 } from "../skill"
 import customizeOpencodeContent from "./skill/customize-mrtoro.md" with { type: "text" }
 import { MrtoroDocs } from "./skill/mrtoro-docs"
+import { DefaultSkills } from "./skill/defaults"
 
 export const CustomizeOpencodeContent = customizeOpencodeContent
 
@@ -38,6 +39,19 @@ export const Plugin = define({
           }),
         }),
       )
+      for (const skill of DefaultSkills.skills) {
+        draft.source(
+          SkillV2.EmbeddedSource.make({
+            type: "embedded",
+            skill: SkillV2.Info.make({
+              name: skill.name,
+              description: skill.description,
+              location: AbsolutePath.make(`/builtin/${skill.name}.md`),
+              content: skill.content,
+            }),
+          }),
+        )
+      }
     })
   }),
 })

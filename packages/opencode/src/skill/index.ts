@@ -8,6 +8,7 @@ import { InstanceState } from "@/effect/instance-state"
 import { Global } from "@opencode-ai/core/global"
 import { SkillPlugin } from "@opencode-ai/core/plugin/skill"
 import { MrtoroDocs } from "@opencode-ai/core/plugin/skill/mrtoro-docs"
+import { DefaultSkills } from "@opencode-ai/core/plugin/skill/defaults"
 import { Permission } from "@/permission"
 import { FSUtil } from "@opencode-ai/core/fs-util"
 import { Config } from "@/config/config"
@@ -283,6 +284,14 @@ const layer = Layer.effect(
           description: MrtoroDocs.description,
           location: MrtoroDocs.location() ?? "<built-in>",
           content: MrtoroDocs.content,
+        }
+        for (const skill of DefaultSkills.skills) {
+          s.skills[skill.name] = {
+            name: skill.name,
+            description: skill.description,
+            location: "<built-in>",
+            content: skill.content,
+          }
         }
         yield* loadSkills(s, yield* InstanceState.get(discovered), events)
         return s
