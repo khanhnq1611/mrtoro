@@ -554,6 +554,39 @@ it.instance("loop calls LLM and returns assistant message", () =>
   }),
 )
 
+it.instance("prompt with an undecodable image degrades instead of failing", () =>
+  Effect.gen(function* () {
+    yield* useServerConfig(providerCfg)
+    const prompt = yield* SessionPrompt.Service
+    const sessions = yield* Session.Service
+    const chat = yield* sessions.create({ title: "Pinned" })
+
+    const result = yield* prompt.prompt({
+      sessionID: chat.id,
+      agent: "gamma",
+      noReply: true,
+      parts: [
+        { type: "text", text: "look at this" },
+        {
+          type: "file",
+          mime: "image/png",
+          url: "data:image/png;base64,AAAA",
+          filename: "broken.png",
+        },
+      ],
+    })
+
+    expect(result.info.role).toBe("user")
+    expect(result.parts.filter((p) => p.type === "file")).toHaveLength(0)
+    const note = result.parts.find(
+      (p) => p.type === "text" && p.text.includes("broken.png") && p.text.includes("could not be processed"),
+    )
+    expect(note).toBeDefined()
+    const text = result.parts.find((p) => p.type === "text" && p.text === "look at this")
+    expect(text).toBeDefined()
+  }),
+)
+
 withMcpInstructions.instance(
   "loop includes MCP instructions in model system context",
   () =>

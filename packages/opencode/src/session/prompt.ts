@@ -1014,6 +1014,26 @@ const layer = Layer.effect(
                 (error) => error instanceof Image.ResizerUnavailableError,
                 () => Effect.succeed(part),
               ),
+              Effect.catch((error) =>
+                Effect.gen(function* () {
+                  yield* Effect.logWarning("image attachment could not be processed", {
+                    sessionID: input.sessionID,
+                    messageID: info.id,
+                    filename: part.filename,
+                    mime: part.mime,
+                    error,
+                  })
+                  const reason = error instanceof Error ? error.message : String(error)
+                  return {
+                    id: PartID.ascending(),
+                    messageID: info.id,
+                    sessionID: input.sessionID,
+                    type: "text",
+                    synthetic: true,
+                    text: `[Image attachment omitted: ${part.filename ?? "unnamed"} (${part.mime}) could not be processed: ${reason} Attach it as PNG or JPEG to include it.]`,
+                  } satisfies SessionV1.Part
+                }),
+              ),
             )
           : Effect.succeed(part),
       )
