@@ -10,6 +10,9 @@
 # "Windows protected your PC": click "More info" and then "Run anyway".
 
 $ErrorActionPreference = "Stop"
+# PS 5.1's Invoke-WebRequest renders a progress bar that makes large downloads
+# crawl; disable it for the lifetime of this script.
+$ProgressPreference = "SilentlyContinue"
 
 $Repo = "khanhnq1611/mrtoro"
 $InstallDir = Join-Path $env:LOCALAPPDATA "Programs\mrtoro"
