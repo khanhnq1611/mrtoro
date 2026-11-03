@@ -34,7 +34,8 @@ so sourcing `~/.bashrc` from inside the installer would not help.
 The script:
 
 - detects the CPU (x64, x64 without AVX2, or arm64) and builds the matching binary from source;
-  there are no prebuilt releases, so the first run takes a few minutes;
+  the first run takes a few minutes (prebuilt archives are on the releases page, but the script
+  always builds the current main branch);
 - builds with the exact Bun version the repo pins, downloaded privately to
   `~/.local/share/mrtoro-bun` if your system Bun differs (your own Bun is not touched);
 - keeps the source in `~/.local/share/mrtoro-src`;
@@ -53,6 +54,30 @@ curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/main/install | b
 ```
 
 Check it: `mrtoro --version`. Alpine and other musl systems are not supported.
+
+### Windows
+
+PowerShell (x64 and arm64):
+
+```powershell
+irm https://raw.githubusercontent.com/khanhnq1611/mrtoro/main/install.ps1 | iex
+```
+
+Downloads the prebuilt `mrtoro.exe` from the latest
+[release](https://github.com/khanhnq1611/mrtoro/releases) into
+`%LOCALAPPDATA%\Programs\mrtoro` and adds that folder to your user `PATH`. Open
+a new terminal and check it with `mrtoro --version`. Run the same command again
+to update (close any running mrtoro first).
+
+Old x64 CPUs without AVX2 automatically get the `baseline` build. The binary is
+unsigned, so SmartScreen may warn on first launch: click "More info" and then
+"Run anyway".
+
+The [releases page](https://github.com/khanhnq1611/mrtoro/releases) also has
+prebuilt archives for Linux and macOS (`mrtoro-<os>-<arch>[-baseline].zip` /
+`.tar.gz`) if you prefer not to build from source; new releases are built
+automatically from `v*` tags.
+
 
 <details>
 <summary>Build by hand</summary>

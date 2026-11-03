@@ -3,9 +3,10 @@
 #
 #   curl -fsSL https://raw.githubusercontent.com/khanhnq1611/mrtoro/main/install | bash && exec "$SHELL"
 #
-# There are no prebuilt releases: this clones the repo, builds the binary for
-# this machine with Bun, and puts `mrtoro` in a directory on your PATH. Run it
-# again to update.
+# This clones the repo, builds the binary for this machine with Bun, and puts
+# `mrtoro` in a directory on your PATH. Run it again to update. (Prebuilt
+# archives for Windows, Linux and macOS are on the releases page; on Linux this
+# script always builds the current main branch instead.)
 #
 # A piped script runs in a child process and cannot change the PATH of the
 # terminal that started it (sourcing ~/.bashrc here would only affect this

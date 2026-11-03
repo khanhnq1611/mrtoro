@@ -1,0 +1,60 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-bun
+
+      # The tag gives the binaries their --version: v1.18.35 -> 1.18.35.
+      # Manual runs leave it empty so build.ts falls back to its built-in default.
+      - name: Resolve version
+        id: version
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build every platform
+        working-directory: packages/opencode
+        env:
+          OPENCODE_RELEASE: "1"
+          OPENCODE_VERSION: ${{ steps.version.outputs.version }}
+        run: bun run script/build.ts
+
+      # build.ts writes each target to dist/<name>/bin and, with OPENCODE_RELEASE,
+      # archives it to dist/<name>.zip (windows, darwin) or dist/<name>.tar.gz (linux).
+      - name: Collect archives
+        run: |
+          mkdir -p release
+          find packages/opencode/dist -maxdepth 1 \( -name '*.zip' -o -name '*.tar.gz' \) -exec cp {} release/ \;
+          echo "Archives:" && ls -la release/
+          test -n "$(ls release/*.zip release/*.tar.gz 2>/dev/null)"
+
+      - name: Upload binaries (manual runs)
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: mrtoro-binaries
+          path: release/*
+          if-no-files-found: error
+
+      - name: Create GitHub release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --generate-notes release/* \
+            || gh release upload "$GITHUB_REF_NAME" release/* --clobber
